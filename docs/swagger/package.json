@@ -1,0 +1,11 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2",
+    "http-proxy": "^1.16.2",
+    "swagger-ui": "2"
+  }
+}
