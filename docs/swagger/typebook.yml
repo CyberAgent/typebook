@@ -1,0 +1,345 @@
+swagger: '2.0'
+info:
+  title: TypeBook
+  description: Schema Registry for Avro with MySQL backend
+  version: "1.8.7-SNAPSHOT"
+# the domain of the service
+host: localhost:8080
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /typebook
+produces:
+  - application/json
+paths:
+  /subjects:
+    get:
+      summary:  Read all subjects registered in this registry
+      tags:
+        - Subjects
+      responses:
+        200:
+          description: All subjects registered in this registry
+  /subjects/{subject}:
+    get:
+      summary: Read a specific subject with the given name
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: field
+          in: query
+          description: name or description
+          required: false
+          type: string
+      tags:
+        - Subjects
+      responses:
+        200:
+          description: a specific subject with the given name
+    post:
+      summary: Create a new subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: descirption
+          in: body
+          description: Description of this subject
+          required: false
+          type: string
+      tags:
+        - Subjects
+      responses:
+        201:
+          description: successful or not
+    put:
+      summary: Update a description of specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: descirption
+          in: body
+          description: Description of this subject
+          required: false
+          type: string
+      tags:
+        - Subjects
+      responses:
+        200:
+          description: successful or not
+    delete:
+      summary: Delete a specific name of subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+      tags:
+        - Subjects
+      responses:
+        200:
+          description: the number of updated rows
+  /subjects/{subject}/versions:
+    post:
+      summary: Register a new schema under the given subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: descirption
+          in: body
+          description: Avro schema definition
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        201:
+          description: successful or not
+    get:
+      summary: Read registered versions under the specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        200:
+          description: the registered versions
+  /subjects/{subject}/versions/{version}:
+    get:
+      summary: Read a specific version of schema definition under the specified subject
+      description: >
+        Read a specific version of schema definition under the specified subject.
+        The variable for version can take on one of the following format "latest", "v1", or "v1.0.0",
+        with the latter two representing the major version and the semantic version respectively.
+      parameters:
+        - name: subject`
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: version
+          in: path
+          description: semantic version string like "v1", "v1.3.1" or "latest"
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        200:
+          description: schema definition
+        404:
+          description: shcema not found
+  /subjects/{subject}/schema/lookup:
+    post:
+      summary: Get the latest schema information which has the same schema definition as the posted schema.
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: schema
+          in: body
+          description: Avro schema definition
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        200:
+          description: If the posted schema has already existed, return the latest schema information.
+        404:
+          description: shcema not found
+  /subjects/{subject}/ids/lookupAll:
+    post:
+      summary: Check if the posted schema is already exists under the specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: schema
+          in: body
+          description: Avro schema definition
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        200:
+          description: a list of schemas.
+  /schemas/ids/{id}:
+    get:
+      summary: Retrieve a schema with the specified id
+      parameters:
+        - name: id
+          in: path
+          description: Schema ID
+          required: true
+          type: int
+      tags:
+        - Schema
+      responses:
+        200:
+          description: schema definition
+        404:
+          description: shcema not found
+  /compatibility/subjects/{subject}/versions/{version}:
+    post:
+      summary: Check if a posted schema is compatible with the specific version of schema under the specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: version
+          in: path
+          description: schema version
+          required: true
+          type: int
+        - name: schema
+          in: body
+          description: schema definition to test
+          required: true
+          type: string
+      tags:
+        - Schema
+      responses:
+        200:
+          description: verifying result
+  /config/{subject}:
+    put:
+      summary: Set configs under the specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: configurations
+          in: body
+          description: >
+            Json object text which represents registry configuration. Current available key is "compatibility" only and
+            that values must be FULL, BACKWARD, FORWARD or NONE. The default is NONE.
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: successful or not
+        422:
+          description: Invalid compatibility value is provided
+    get:
+      summary: Read configurations under the specified subject in a json format
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: configurations
+        404:
+          description: Record Not Found
+    delete:
+      summary: Delete all configs under the subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: configurations
+        404:
+          description: Record Not Found
+  /config/{subject}/properties/{property}:
+    put:
+      summary: Set a specific property of config under the specified subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: property
+          in: path
+          description: Property Name
+          required: true
+          type: string
+        - name: value
+          in: body
+          description: value for the property
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: successful or not
+        422:
+          description: Invalid compatibility value is provided
+    get:
+      summary: Read a value for a specific property
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: property
+          in: path
+          description: Property Name
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: successful or not
+        404:
+          description: Property Not Found
+    delete:
+      summary: Delete a specific property under the subject
+      parameters:
+        - name: subject
+          in: path
+          description: Subject Name
+          required: true
+          type: string
+        - name: property
+          in: path
+          description: Property Name
+          required: true
+          type: string
+      tags:
+        - Config
+      responses:
+        200:
+          description: successful or not

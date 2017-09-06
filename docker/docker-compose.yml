@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend-db:
+    image: "mysql:5.7.19"
+    healthcheck:
+      test: ["CMD", "mysql", "-u", "typebook", "-p", "-e", "quit"]
+      interval: "15s"
+      timeout: "5s"
+      retries: 5
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "typebook"
+      MYSQL_USER: "typebook"
+      MYSQL_PASSWORD: "typebook"
+      MYSQL_DATABASE: "registry"
+
+  typebook:
+    image: "registry.hub.docker.com/cyberagent/typebook:latest"
+    depends_on:
+      - "backend-db"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: "30s"
+      timeout: "120s"
+      retries: 5
+    restart: "on-failure"
+    ports:
+      - "8888:8888"
+      - "9990:9990"
+    environment:
+      MYSQL_SERVERS: "backend-db:3306"
+      MYSQL_USER: "typebook"
+      MYSQL_PASSWORD: "typebook"
+      MYSQL_DATABASE: "registry"
