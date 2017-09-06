@@ -1,0 +1,38 @@
+{
+  "id": "/typebook",
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "registry.hub.docker.com/cyberagent/typebook:latest",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8888,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 9990,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "instances": 1,
+  "cpus": 0.5,
+  "mem": 256,
+  "env": {
+    "MYSQL_SERVERS": "YOUR_MYSQL_SERVER_HOST",
+    "MYSQL_USER": "YOUR_MYSQL_USER",
+    "MYSQL_PASSWORD": "YOUR_MYSQL_PASSWORD",
+    "MYSQL_DATABASE": "registry"
+  },
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "path": "/health",
+      "gracePeriodSeconds": 60,
+      "intervalSeconds": 15,
+      "timeoutSeconds": 10
+    }
+  ]
+}
