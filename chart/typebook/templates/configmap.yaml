@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  {{- if .Values.mysql.enabled }}
+  mysql-servers: '{{ template "mysql.fullname" . }}:3306'
+  {{- else }}
+  mysql-servers: {{ .Values.mysql.endpoints | join "," }}
+  {{- end }}
+  mysql-database: {{ .Values.mysql.mysqlDatabase | quote }}
