@@ -43,7 +43,7 @@ lazy val commonSettings = Seq(
     case "META-INF/io.netty.versions.properties" => MergeStrategy.concat
     case x => (assemblyMergeStrategy in assembly).value(x)
   },
-  organization := "com.cyberagent.typebook",
+  organization := "jp.co.cyberagent.typebook",
   parallelExecution in Test := false,
   publishArtifact := false,
   publishArtifact in Test := false,
@@ -85,7 +85,7 @@ lazy val server = (project in file("server")).
   settings(commonSettings).
   settings(
     name := "typebook",
-    mainClass in assembly := Some("com.cyberagent.typebook.ServerApp"),
+    mainClass in assembly := Some("jp.co.cyberagent.typebook.ServerApp"),
     libraryDependencies ++= Seq(
       "com.github.finagle" %% "finch-core" % finchVersion,
       "com.github.finagle" %% "finch-circe" % finchVersion,
