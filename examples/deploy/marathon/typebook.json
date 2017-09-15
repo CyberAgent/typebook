@@ -3,7 +3,7 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "registry.hub.docker.com/cyberagent/typebook:latest",
+      "image": "cyberagent/typebook:latest",
       "network": "BRIDGE",
       "portMappings": [
         {

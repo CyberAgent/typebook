@@ -10,7 +10,6 @@ licenses in ThisBuild += ("MIT", new URL("https://opensource.org/licenses/MIT"))
 
 // The information about docker repository
 val dockerImageVersion = taskKey[String]("the version for docker image of schema registry server")
-val dockerRepository = "registry.hub.docker.com"
 
 // The versions for dependency libraries
 val avroVersion = "1.8.2"
@@ -114,8 +113,8 @@ lazy val server = (project in file("server")).
     },
     dockerImageVersion := sys.env.getOrElse("TAG", version.value),
     imageNames in docker := Seq(
-      ImageName(s"$dockerRepository/cyberagent/typebook:${dockerImageVersion.value}"),
-      ImageName(s"$dockerRepository/cyberagent/typebook:latest")
+      ImageName(s"cyberagent/typebook:${dockerImageVersion.value}"),
+      ImageName(s"cyberagent/typebook:latest")
     )
   ).
   dependsOn(core % "test->test;compile->compile")

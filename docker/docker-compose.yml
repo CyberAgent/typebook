@@ -17,7 +17,7 @@ services:
       MYSQL_DATABASE: "registry"
 
   typebook:
-    image: "registry.hub.docker.com/cyberagent/typebook:latest"
+    image: "cyberagent/typebook:latest"
     depends_on:
       - "backend-db"
     healthcheck:
