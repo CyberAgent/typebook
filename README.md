@@ -75,7 +75,7 @@ mysql                       1/1       Running   0          45m
 Next, deploy the Typebook server and expose its port using a node port.
 
 ```
-$ kubectl run typebook --image=registry.hub.docker.com/cyberagent/typebook --port=8888 --env="MYSQL_SERVERS=mysql:3306" --env="MYSQL_PASSWORD=yourpassword" --port=8888
+$ kubectl run typebook --image=cyberagent/typebook --port=8888 --env="MYSQL_SERVERS=mysql:3306" --env="MYSQL_PASSWORD=yourpassword" --port=8888
 $ kubectl expose deployment typebook --name=typebook-nodeport --port=8888 --target-port=8888 --type="NodePort"
 ```
 
@@ -96,7 +96,7 @@ Example Marathon config:
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "registry.hub.docker.com/cyberagent/typebook",
+      "image": "cyberagent/typebook",
       "network": "BRIDGE",
       "portMappings": [
         {
