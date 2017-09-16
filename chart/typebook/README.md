@@ -13,7 +13,7 @@ This chart bootstraps a typebook deployment on a [Kubernetes](http://kubernetes.
 
 ## Prerequisites
 We check its work under the condition below
-- Kubernetes: v1.7.5 (Minikube)
+- Kubernetes: v1.7.5 (GKE and Minikube)
 - PV support on underlying infrastructure (if persistence is required)
 
 ## Install the chart
@@ -37,7 +37,7 @@ $ helm delete my-release
 | `image.tag`  | typebook image version | `1.0.0` |
 | `image.pullPolicy` | typebook image pull policy | `InNotPresent` |
 | `service.type` | typebook service type | `ClusterIP` |
-| `service.internalPort` | on which port typebook server listen | `8080` |
+| `service.internalPort` | on which port typebook server listen | `8888` |
 | `service.externalPort` | typebook service port | `8888` |
 | `service.adminPort` | the port for Finagle administration dashboard | `9090` |
 | `replicas` | Number of typebook replicas | `2` |
