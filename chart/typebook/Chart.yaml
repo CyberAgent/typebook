@@ -1,6 +1,7 @@
 
 name: "typebook"
 version: "0.1.0"
+appVersion: "0.1.0"
 description: "An Avro schema registry"
 keywords:
   - "avro"
@@ -13,5 +14,4 @@ maintainers:
   - name: "saint1991"
     email: "saint.seiya.1122@gmail.com"
 engine: "gotpl"
-apiVersion: "1.0.0"
 tillerVersion: "2.5.0"

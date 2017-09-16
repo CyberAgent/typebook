@@ -2,4 +2,4 @@ dependencies:
   - name: "mysql"
     version: "0.2.9"
     repository: "https://kubernetes-charts.storage.googleapis.com"
-    condition: "mysql.chart.enabled"
+    condition: "mysql.enabled"
