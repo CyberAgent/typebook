@@ -32,6 +32,7 @@ object RegistryService {
 
     import io.circe.generic.auto._
     import io.finch.circe._
+    import jp.co.cyberagent.typebook.api.ErrorHandling.errorEncoder
 
     private val log = Logger.get(this.getClass)
 
