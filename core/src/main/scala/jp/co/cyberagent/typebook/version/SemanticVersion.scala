@@ -47,7 +47,7 @@ case class SemanticVersion(major: Int, minor: Int, patch: Int) extends Ordered[S
 
 object SemanticVersion {
 
-  val regexp: Regex = "v((0|[1-9][0-9]*)\\.){2}(0|[1-9][0-9]*)".r
+  val regexp: Regex = "^v((0|[1-9][0-9]*)\\.){2}(0|[1-9][0-9]*)$".r
 
   def apply(str: String): SemanticVersion = {
     require(regexp.pattern.matcher(str).matches(), s"Invalid format in version representation - $str")
