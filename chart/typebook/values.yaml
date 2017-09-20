@@ -1,0 +1,39 @@
+# Default values for typebook.
+
+image:
+  name: "cyberagent/typebook"
+  tag: "latest"
+  pullPolicy: "IfNotPresent"
+service:
+  type: "ClusterIP"
+  internalPort: 8888
+  externalPort: 8888
+  adminPort: 9990
+replicas: 2
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+ingress:
+  enabled: false
+#  annotations:
+#    kubernetes.io/ingress.class: typebook
+#  hosts:
+#    -  "typebook.domain.com"
+
+mysql:
+  enabled: true
+  imageTag: "5.7.19"
+  imagePullPolicy: "IfNotPresent"
+  mysqlRootPassword: "typebook"
+  mysqlUser: "typebook"
+  mysqlPassword: "typebook"
+  mysqlDatabase: "registry"
+  persistence:
+    enabled: true
+    size: "10Gi"
+  resources:
+    requests:
+      memory: "1024Mi"
+      cpu: "100m"
+

@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  title: TypeBook
+  title: typebook
   description: Schema Registry for Avro with MySQL backend
-  version: "1.8.7-SNAPSHOT"
+  version: "1.0.0"
 # the domain of the service
 host: localhost:8080
 # array of all schemes that your API supports
