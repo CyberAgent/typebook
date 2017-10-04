@@ -20,34 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	typebook "github.com/cyberagent/typebook/client/go"
 )
 
-var Properties map[string]string
+var subjectUpdateCmd = &cobra.Command{
+	Use:   "update $subject",
+	Short: "update subject description",
+	Long:  "Update description of a specified subject.",
+	Args:  cobra.ExactArgs(1),
+	PreRun: func(cmd *cobra.Command, args []string) {
+		viper.BindPFlag(descriptionKey, cmd.Flags().Lookup(descriptionKey))
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+
+		name := args[0]
+		description := viper.GetString("description")
+
+		client := typebook.NewClient(viper.GetString("url"))
+		if updatedRows, err := client.UpdateDescription(name, description); err != nil {
+			exitWithError(err)
+		} else if updatedRows == 1 {
+			fmt.Printf("the description for Subject `%s` is updated.\n", name)
+		}
+	},
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
-	}
-}
+	subjectCmd.AddCommand(subjectUpdateCmd)
 
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	subjectUpdateCmd.Flags().StringP(descriptionKey, "d", "", "description for a subject")
 }

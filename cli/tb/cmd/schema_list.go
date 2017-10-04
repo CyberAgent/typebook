@@ -20,34 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
-)
+import "github.com/spf13/cobra"
 
-var Properties map[string]string
+var schemaListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "list metadata of schemas",
+	Long:  "List metadata of schemas.",
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
-	}
-}
-
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	schemaCmd.AddCommand(schemaListCmd)
 }

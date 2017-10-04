@@ -20,34 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	typebook "github.com/cyberagent/typebook/client/go"
 )
 
-var Properties map[string]string
+// configDeleteCmd represents the delete command
+var subjectDeleteCmd = &cobra.Command{
+	Use:   "delete $subject",
+	Short: "delete a subject",
+	Long:  `Delete a subject.
+If some schemas remains under the subject, this command will fail.`,
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+
+		name := args[0]
+
+		client := typebook.NewClient(viper.GetString("url"))
+		if deletedRows, err := client.DeleteSubject(name); err != nil {
+			exitWithError(err)
+		} else if deletedRows == 1 {
+			fmt.Printf("Subject `%s` is deleted.\n", name)
+		}
+	},
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
-	}
-}
-
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	subjectCmd.AddCommand(subjectDeleteCmd)
 }

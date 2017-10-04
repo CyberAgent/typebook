@@ -20,34 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	typebook "github.com/cyberagent/typebook/client/go"
 )
 
-var Properties map[string]string
+var schemaListVersionsCmd = &cobra.Command{
+	Use:   "versions",
+	Short: "list schema versions existing under a subject",
+	Long:  "List schema versions existing under the specified subject.",
+	Run: func(cmd *cobra.Command, args []string) {
+
+		subject := viper.GetString("subject")
+		if subject == "" {
+			exitWithUsage(cmd, fmt.Errorf("subject is not specified"))
+		}
+
+		client := typebook.NewClient(viper.GetString("url"))
+		if versions, err := client.ListVersions(subject); err != nil {
+			exitWithError(err)
+		} else {
+			showSchemaVersions(versions...)
+		}
+	},
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
-	}
-}
-
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	schemaListCmd.AddCommand(schemaListVersionsCmd)
 }

@@ -30,6 +30,7 @@ import (
 )
 
 var SemVerRegExp = regexp.MustCompile("^v((0|[1-9][0-9]*)\\.){2}(0|[1-9][0-9]*)$")
+var MajorVerRegExp = regexp.MustCompile("^v(0|[1-9][0-9]*)$")
 
 // SemVer is the version that represents compatibility between schemas manged in typebook.
 type SemVer struct {
@@ -45,6 +46,10 @@ func (sv *SemVer) String() string {
 // IsSemVer checks if the given version string is valid form of semantic version and return true when it is valid.
 func IsSemVer(version string) bool {
 	return SemVerRegExp.MatchString(version)
+}
+
+func IsMajorVer(version string) bool {
+	return MajorVerRegExp.MatchString(version)
 }
 
 // NewSemVer create a instance of SemVer from a given version string.

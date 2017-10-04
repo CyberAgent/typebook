@@ -20,34 +20,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
+import (
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	typebook "github.com/cyberagent/typebook/client/go"
+	"github.com/cyberagent/typebook/client/go/model"
 )
 
-var Properties map[string]string
+var subjectListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "list subjects",
+	Long:  "Retrieve and show all existent subjects and their descriptions.",
+	Run: func(cmd *cobra.Command, args []string) {
+
+		client := typebook.NewClient(viper.GetString("url"))
+		if names, err := client.ListSubjects(); err != nil {
+			exitWithError(err)
+		} else {
+			subjects := make([]*model.Subject, 0)
+			for _, name := range names {
+				subject, err := client.GetSubject(name)
+				if err != nil {
+					exitWithError(err)
+				}
+				subjects = append(subjects, subject)
+			}
+			showSubjects(subjects...)
+		}
+	},
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
-	}
-}
-
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	subjectCmd.AddCommand(subjectListCmd)
 }
