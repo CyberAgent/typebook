@@ -20,34 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package model
+package cmd
 
-const (
-	CompatibilityProp = "compatibility"
+import (
+	"fmt"
+
+	"github.com/cyberagent/typebook/client/go/model"
+	"github.com/gosuri/uitable"
+	"github.com/spf13/cobra"
 )
 
-var Properties map[string]string
+var subjectCmd = &cobra.Command{
+	Use:   "subject",
+	Short: "manage subjects on a typebook",
+	Long:  "Manage subjects on a typebook.",
+}
 
 func init() {
-	Properties = map[string]string{
-		CompatibilityProp: "Enforce schema compatibility to newly registered schemas.",
+	RootCmd.AddCommand(subjectCmd)
+}
+
+func showSubjects(subjects ...*model.Subject) {
+	table := uitable.New()
+	table.AddRow("NAME", "DESCRIPTION")
+	for _, subject := range subjects {
+		table.AddRow(subject.Name, subject.Description)
 	}
-}
-
-func ListProperties() []string {
-	keys := make([]string, 0)
-	for k := range Properties {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-type Property struct {
-	Subject  string `json:"subject"`
-	Property string `json:"property"`
-	Value    string `json:"value"`
-}
-
-type Config struct {
-	Compatibility string `json:"compatibility"`
+	fmt.Println(table)
+	fmt.Println()
 }
