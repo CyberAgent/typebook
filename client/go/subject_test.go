@@ -40,7 +40,7 @@ const (
 )
 
 var (
-	client *Client = NewClient(host, nil)
+	client *Client = NewClient(host)
 )
 
 func init() {

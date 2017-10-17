@@ -36,7 +36,7 @@ func (se *ServerError) Error() string {
 	return se.Message
 }
 
-type ClientError = []error
+type ClientError []error
 
 type Error struct {
 	*ServerError

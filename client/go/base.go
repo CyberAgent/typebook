@@ -25,7 +25,6 @@ package _go
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/parnurzeal/gorequest"
 
@@ -33,35 +32,28 @@ import (
 )
 
 type baseClient struct {
-	host      string
-	transport *http.Transport
+	host string
+	*gorequest.SuperAgent
 }
 
 // Get constructs a HTTP GET request as a `gorequest.SuperAgent`.
 func (bc *baseClient) Get(path string) *gorequest.SuperAgent {
-	return createRequest(bc.transport).Get(fmt.Sprintf("http://%s%s", bc.host, path))
+	return bc.SuperAgent.Get(fmt.Sprintf("http://%s%s", bc.host, path))
 }
 
 // Post constructs a HTTP POST request as a `gorequest.SuperAgent`.
 func (bc *baseClient) Post(path string) *gorequest.SuperAgent {
-	return createRequest(bc.transport).Post(fmt.Sprintf("http://%s%s", bc.host, path))
+	return bc.SuperAgent.Post(fmt.Sprintf("http://%s%s", bc.host, path))
 }
 
 // Put constructs a HTTP PUT request as a `gorequest.SuperAgent`.
 func (bc *baseClient) Put(path string) *gorequest.SuperAgent {
-	return createRequest(bc.transport).Put(fmt.Sprintf("http://%s%s", bc.host, path))
+	return bc.SuperAgent.Put(fmt.Sprintf("http://%s%s", bc.host, path))
 }
 
 // Delete constructs a HTTP DELETE request as a `gorequest.SuperAgent`
 func (bc *baseClient) Delete(path string) *gorequest.SuperAgent {
-	return createRequest(bc.transport).Delete(fmt.Sprintf("http://%s%s", bc.host, path))
-}
-
-// createRequest instantiates new `*gorequest.SuperAgent` and set `http.Transport`.
-func createRequest(transport *http.Transport) *gorequest.SuperAgent {
-	request := gorequest.New()
-	request.Transport = transport
-	return request
+	return bc.SuperAgent.Delete(fmt.Sprintf("http://%s%s", bc.host, path))
 }
 
 // checkError checks the response of `gorequest.EndBytes()` and returns *model.Error
