@@ -23,19 +23,8 @@
 package _go
 
 import (
-	"errors"
-	"net/http"
+	"github.com/parnurzeal/gorequest"
 )
-
-var defaultTransport *http.Transport
-
-func init() {
-	var ok bool
-	defaultTransport, ok = http.DefaultTransport.(*http.Transport)
-	if !ok {
-		panic(errors.New("failed to cast DefaultTransport to *http.Transport"))
-	}
-}
 
 type Client struct {
 	*subjectClient
@@ -46,13 +35,9 @@ type Client struct {
 // NewClient create and instantiate a new Client object which can interact with
 // typebook server at the designated endpoint.
 // endpoint should be in the form of `host:port`.
-// This function takes *http.Transport as the second argument to configure the client's behavior.
-// When passed nil, it will use `http.DefaultTransport`
-func NewClient(endpoint string, transport *http.Transport) *Client {
-	baseClient := &baseClient{endpoint, transport}
-	if transport == nil {
-		baseClient.transport = defaultTransport
-	}
+// Client instances should create for each goroutine to send multiple requests concurrently.
+func NewClient(endpoint string) *Client {
+	baseClient := &baseClient{endpoint, gorequest.New()}
 	return &Client{
 		&subjectClient{baseClient},
 		&configClient{baseClient},

@@ -109,7 +109,7 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
     "config" :: path[String] ::"properties" :: path[String].should("be a valid property")(RegistryConfig.Properties.contains)
   ) { (subject: String, property: String) =>
     ConfigClient.readProperty(subject, property).map {
-      case None => RegistryConfig.default.toMap.get(property) match {
+      case None => RegistryConfig.default.toMap.get(property) match { // if not configured, use default as a fallback.
         case None => NotFound(ErrorResponse(422, "Invalid Configuration Key"))
         case Some(value) => Ok(Buf.Utf8(value)).withHeader("Content-Type" -> "text/plain")
       }
