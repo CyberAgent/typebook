@@ -1,15 +1,14 @@
 # API docs on swagger
 
-Build and run swagger-ui to see the API documentation.
+This folder contains everything to build and run the Swagger UI for browsing the API documentation.
 
-If you don't have `cyberagent/typebook:latest` image, you should build the image beforehand.
+As a prerequisite, the `cyberagent/typebook:latest` image needs to be available locally - it can be built from the project root (the directory containing build.sbt) as follows:
 
-On the directory containing `build.sbt`, you can build the image as follows:
 ```
 $ sbt docker
 ```
 
-Then start swagger 
+The Swagger UI can then be started as follows:
 ```
 $ docker-compose up
 ```

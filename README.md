@@ -13,7 +13,7 @@ Registry server for persisting and managing data schemas defined in Avro's schem
 
 
 ## Requirements
-* MySQL or MariaDB (Tested Version: MySQL 5.7 and MariaDB 10)
+* MySQL or MariaDB (Tested versions: MySQL 5.7 and MariaDB 10)
 
 
 
@@ -25,57 +25,57 @@ $ docker-compose -f docker/docker-compose.yml up -d
 ```
 
 This will start the typebook server in a container with Twitter Server Admin and MySQL server, exposing the service on port `8888`.
-Then you can interact with typebook using `curl` or any other HTTP clients.
+Once the service is up, interact with typebook using `curl` or any other HTTP clients.
 
 
 
 ## Configurations
-You can configure the connection to backend database via following environment variables.
+You can configure the connection to the backend database via the following environment variables.
 
 | name           | description                                 | default                      |
 | -------------- | ------------------------------------------- | ---------------------------- |
 | MYSQL_SERVERS  | comma-separated database hostname and port  | backend-db:3306              |
 | MYSQL_USER     | database username                           | typebook                     |
 | MYSQL_PASSWORD | database user password                      |                              |
-| MYSQL_DATABASE | database name                               | registry     
+| MYSQL_DATABASE | database name                               | registry
 
 
 
 ## Deployment
 
 ### Kubernetes
-We provide [helm](https://docs.helm.sh) chart. 
-Please refer [chart/typebook](chart/typebook) for more details.
+A [helm](https://docs.helm.sh) chart is provided -
+please refer to [chart/typebook](chart/typebook) for more details.
 
 
 ### Marathon
-An example marathon service spec file is available [here](examples/deploy/marathon/typebook.json).  
-For the case of DC/OS, deploying by following command:
+An example marathon service spec file is available [here](examples/deploy/marathon/typebook.json).
+To deploy on DC/OS, use the following command:
 
 ```
 $ dcos marathon app add examples/deploy/marathon/typebook.json
 ```
 
-Note that you should prepare backend database beforehand and replace environment variables according to it.
+Please note that a backend database needs to be available and configured via environment variables beforehand.
 
 
 
 
 ## API
-Documents of typebook API is available [here](server).  
-We also provide swagger-ui. Please see [here](docs) for more details.
+API documentation for the typebook API are available [here](server).
+A Swagger UI is provided as well - see [here](docs) for more details.
 
 
 
 ## Testing
-To run the test suite, run the following command in the directory containing `build.sbt`.
+To execute the test suite, run the following command in the directory containing `build.sbt`.
 ```
 $ sbt test
 ```
 
 
 ## Contributors
-Thanks all for your contributions!
+Thanks to all contributors!
 - [aberey](https://github.com/aberey)
 - [potix2](https://github.com/potix2)
 - [tsukaby](https://github.com/tsukaby)
@@ -83,5 +83,5 @@ Thanks all for your contributions!
 
 
 
-## License 
+## License
 typebook is Open Source and available under the MIT License.
