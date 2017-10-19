@@ -12,9 +12,9 @@ $ helm install .
 This chart bootstraps a typebook deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
-We have tested its work under the condition below
+The chart has been tested with:
 - Kubernetes: v1.7.5 (GKE and Minikube)
-- PV support on underlying infrastructure (if persistence is required)
+- PV support on the underlying infrastructure (if persistence is desired)
 
 ## Install the chart
 To install the chart with the release name `my-typebook`:
@@ -37,25 +37,24 @@ $ helm delete my-typebook
 | `image.tag`             | typebook image tag                                             | `latest`                                     |
 | `image.pullPolicy`      | typebook image pull policy                                     | `InNotPresent`                               |
 | `service.type`          | typebook service type                                          | `ClusterIP`                                  |
-| `service.internalPort`  | on which port typebook server listen                           | `8888`                                       |
+| `service.internalPort`  | port on which the typebook server listens                      | `8888`                                       |
 | `service.externalPort`  | typebook service port                                          | `8888`                                       |
-| `service.adminPort`     | the port for Finagle administration dashboard                  | `9090`                                       |
-| `replicas`              | Number of typebook replicas                                    | `2`                                          |
+| `service.adminPort`     | port for the Finagle administration dashboard                  | `9090`                                       |
+| `replicas`              | number of typebook replicas                                    | `2`                                          |
 | `resources`             | typebook resource requests and limits                          | `{requests: {cpu: "100m", memory: "256Mi"}}` |
-| `mysql.enabled`         | Utilize mysql chart for the backend database                   | `true`                                       |
-| `mysql.endpoints`       | List of in the form of `IP:PORT` to use external mysql servers | `nil`                                        |
+| `mysql.enabled`         | flag wether to use the mysql chart for the backend database    | `true`                                       |
+| `mysql.endpoints`       | list in the form of `IP:PORT` to use external mysql servers    | `nil`                                        |
 | `mysql.mysqlUser`       | MySQL user for typebook                                        | `typebook`                                   |
 | `mysql.mysqlPassword`   | MySQL password for the user `mysql.mysqlUser`                  | `typebook`                                   |
-| `mysql.mysqlDatabase`   | MySQL database for typebook                                    | `registry`                                   |
+| `mysql.mysqlDatabase`   | MySQL database name for typebook                               | `registry`                                   |
 
-In addition to the above, some configurations are available for MySQL chart.
-You can find all configurations [here](https://github.com/kubernetes/charts/tree/master/stable/mysql).
-To custom MySQL chart, set them under `mysql.` prefix.
+In addition to the above, some configuration options are available as part of the MySQL chart.
+Details are documented [here](https://github.com/kubernetes/charts/tree/master/stable/mysql).
+To customize the MySQL chart, set its options using a `mysql.` prefix.
 
 ## MySQL
-By default, this chart will use a MySQL database deployed as a chart dependency.
-You can also bring your own external MySQL.
-To do so, set the following in your custom values.yaml file:
+By default, this chart will use a MySQL database deployed via chart dependency.
+To use an external MySQL instance, customize values.yml as follows:
 
 ```values.yaml
 mysql:
@@ -72,9 +71,9 @@ $ helm install -f values.yaml .
 
 ### Persistence
 
-When using MySQL chart, it mounts PersistentVolume on MySQL pod. 
-The volume is created by dynamic volume provisioning. 
-If you want to disable it or change the persistence properties, update the persistence section of your custom values.yaml file:
+When using the MySQL chart, a PersistentVolume is mounted on the MySQL pod. 
+The volume is created using dynamic volume provisioning. 
+To disable it or change the persistence properties, update the persistence section in values.yaml as follows:
 
 ``` values.yaml
 mysql:
