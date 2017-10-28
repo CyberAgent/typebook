@@ -4,7 +4,8 @@
 
 ## TL;DR;
 ```
-$ helm install .
+$ helm repo add typebook https://cyberagent.github.io/typebook/charts
+$ helm install typebook/typebook
 ```
 
 ## Introduction
