@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   typebook:
   - appVersion: 0.1.0
-    created: 2017-10-28T21:03:45.124603422+09:00
+    created: 2017-10-28T22:55:04.589911472+09:00
     description: An Avro schema registry
     digest: d74901300e197c5ec0ebcfc26c8c9f0cc773534fb72aeaa74d12e0fec7fb0ca6
     engine: gotpl
@@ -19,6 +19,6 @@ entries:
     - https://avro.apache.org
     tillerVersion: 2.5.0
     urls:
-    - typebook-0.1.0.tgz
+    - https://cyberagent.github.io/typebook/typebook-0.1.0.tgz
     version: 0.1.0
-generated: 2017-10-28T21:03:45.123599147+09:00
+generated: 2017-10-28T22:55:04.580732123+09:00

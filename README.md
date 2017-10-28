@@ -45,7 +45,7 @@ You can configure the connection to the backend database via the following envir
 
 ### Kubernetes
 A [helm](https://docs.helm.sh) chart is provided -
-please refer to [chart/typebook](chart/typebook) for more details.
+please refer to [chart/typebook](charts/typebook) for more details.
 
 
 ### Marathon
