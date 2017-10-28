@@ -17,10 +17,15 @@ The chart has been tested with:
 - PV support on the underlying infrastructure (if persistence is desired)
 
 ## Install the chart
-To install the chart with the release name `my-typebook`:
+
+Before installing, you should add the helm repository of typebook:
 ```
-$ helm dependency update
-$ helm install --name my-typebook .
+$ helm repo add typebook https://cyberagent.github.io/typebook/charts
+```
+
+Then you can install it with the release name `my-typebook`:
+```
+$ helm install --name my-typebook typebook/typebook
 ```
 
 ## Uninstall the chart
