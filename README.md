@@ -1,4 +1,4 @@
-# typebook
+# typebook [![Build Status](https://travis-ci.org/CyberAgent/typebook.svg?branch=master)](https://travis-ci.org/CyberAgent/typebook)
 Registry server for persisting and managing data schemas defined in Avro's schema format.
 
 
