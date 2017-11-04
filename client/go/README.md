@@ -1,5 +1,5 @@
 
-# Go Client
+# Go Client [![GoDoc](https://godoc.org/github.com/CyberAgent/typebook/client/go?status.svg)](https://godoc.org/github.com/CyberAgent/typebook/client/go)
 
 typebook client for Go.
 
@@ -54,4 +54,4 @@ This client is thin wrapper of [gorequest](https://github.com/parnurzeal/goreque
 Please consult gorequest documentation.
 
 ## API
-See [GoDoc reference]() for detailed API documentation.
+See [GoDoc reference](https://godoc.org/github.com/CyberAgent/typebook/client/go) for detailed API documentation.
