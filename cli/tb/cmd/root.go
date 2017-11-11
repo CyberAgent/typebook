@@ -76,8 +76,10 @@ func initConfig() {
 }
 
 func initFlags() {
-	RootCmd.PersistentFlags().String("url", "127.0.0.1:8888", "URL of a typebook server")
-	viper.BindPFlag("url", RootCmd.PersistentFlags().Lookup("url"))
+	if RootCmd.PersistentFlags().Lookup("url") == nil {
+		RootCmd.PersistentFlags().String("url", "127.0.0.1:8888", "URL of a typebook server")
+		viper.BindPFlag("url", RootCmd.PersistentFlags().Lookup("url"))
+	}
 }
 
 // string begin with `@` is considered as a path

@@ -130,9 +130,11 @@ func TestListSubjects(t *testing.T) {
 func TestUpdateDescription(t *testing.T) {
 	defer gock.Off()
 
+	const updatedDesciption = "Updated description"
 	expect := 1
 	gock.New(host).
 		Put("/subjects/" + subject).
+		BodyString(updatedDesciption).
 		Reply(200).
 		SetHeaders(map[string]string{
 			"Content-Type":   "text/plain",
@@ -140,7 +142,7 @@ func TestUpdateDescription(t *testing.T) {
 		}).
 		BodyString(fmt.Sprintf("%d", expect))
 
-	if actual, err := client.UpdateDescription(subject, "Updated description"); err != nil {
+	if actual, err := client.UpdateDescription(subject, updatedDesciption); err != nil {
 		t.Errorf(`UpdateDescription("%s", "Updated description") should not be an error. But an error was occurred: %v)`, subject, err)
 	} else if actual != int64(expect) {
 		t.Errorf(`UpdateDescription("%s", "Updated description") = %v, wants %v`, subject, actual, expect)

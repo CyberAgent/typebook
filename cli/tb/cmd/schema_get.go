@@ -52,21 +52,21 @@ Available form of version is semantic version (e.g. v1.0.0) or major version (e.
 
 		client := typebook.NewClient(viper.GetString("url"))
 		if id != -1 {
-			showSchemaDef(func() (*model.Schema, error) {
+			showSchemaDef(func() (*model.Schema, *model.Error) {
 				return client.GetSchemaById(id)
 			})
 		} else if subject != "" && version == "" {
-			showSchemaDef(func() (*model.Schema, error) {
+			showSchemaDef(func() (*model.Schema, *model.Error) {
 				return client.GetLatestSchema(subject)
 			})
 		} else if subject != "" && model.IsMajorVer(version) {
 			majorVer, _ := strconv.Atoi(version[1:])
-			showSchemaDef(func() (*model.Schema, error) {
+			showSchemaDef(func() (*model.Schema, *model.Error) {
 				return client.GetSchemaByMajorVersion(subject, majorVer)
 			})
 		} else if subject != "" && model.IsSemVer(version) {
 			semver, _ := model.NewSemVer(version)
-			showSchemaDef(func() (*model.Schema, error) {
+			showSchemaDef(func() (*model.Schema, *model.Error) {
 				return client.GetSchemaBySemVer(subject, *semver)
 			})
 		} else if version != "" {
@@ -85,7 +85,7 @@ func init() {
 	schemaGetCmd.Flags().String("version", "", "version of schema")
 }
 
-func showSchemaDef(f func() (*model.Schema, error)) {
+func showSchemaDef(f func() (*model.Schema, *model.Error)) {
 	schema, err := f()
 	if err != nil {
 		exitWithError(err)

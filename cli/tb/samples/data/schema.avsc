@@ -1,0 +1,11 @@
+{
+    "namespace": "jp.co.cyberagent.typebook.example",
+    "name": "Payment",
+    "type": "record",
+    "fields": [
+        {"name": "id", "type": "int"},
+        {"name": "name", "type": "string"},
+        {"name": "amount", "type": "double"},
+        {"name": "time", "type": "long"}
+    ]
+}

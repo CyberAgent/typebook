@@ -61,17 +61,17 @@ Possible values for version is what represents major version (e.g. v1) or semant
 
 		client := typebook.NewClient(viper.GetString("url"))
 		if version == "" {
-			showIsCompatible(func() (*model.Compatibility, error) {
+			showIsCompatible(func() (*model.Compatibility, *model.Error) {
 				return client.CheckCompatibilityWithLatest(subject, string(content))
 			})
 		} else if model.IsMajorVer(version) {
 			majorVer, _ := strconv.Atoi(version[1:])
-			showIsCompatible(func() (*model.Compatibility, error) {
+			showIsCompatible(func() (*model.Compatibility, *model.Error) {
 				return client.CheckCompatibilityWithMajorVersion(subject, majorVer, string(content))
 			})
 		} else if model.IsSemVer(version) {
 			semver, _ := model.NewSemVer(version)
-			showIsCompatible(func() (*model.Compatibility, error) {
+			showIsCompatible(func() (*model.Compatibility, *model.Error) {
 				return client.CheckCompatibilityWithSemVer(subject, *semver, string(content))
 			})
 		} else {
@@ -87,7 +87,7 @@ func init() {
 	compatibilityCheckCmd.Flags().String("version", "", "version of comparison (optional).")
 }
 
-func showIsCompatible(f func() (*model.Compatibility, error)) {
+func showIsCompatible(f func() (*model.Compatibility, *model.Error)) {
 	if compatibility, err := f(); err != nil {
 		exitWithError(err)
 	} else {

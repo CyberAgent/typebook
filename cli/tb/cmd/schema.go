@@ -24,9 +24,10 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
+	"os"
+	"strconv"
 
-	"github.com/gosuri/uitable"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -49,23 +50,21 @@ func init() {
 }
 
 func showSchemaMetas(schemas ...model.Schema) {
-	table := uitable.New()
-	table.AddRow("ID", "SUBJECT", "VERSION")
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "SUBJECT", "VERSION"})
 	for _, schema := range schemas {
-		table.AddRow(schema.Id, schema.Subject, schema.Version.String())
+		table.Append([]string{strconv.FormatInt(schema.Id, 10), schema.Subject, schema.Version.String()})
 	}
-	fmt.Println(table)
-	fmt.Println()
+	table.Render()
 }
 
 func showSchemaVersions(versions ...model.SemVer) {
-	table := uitable.New()
-	table.AddRow("VERSION")
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"VERSION"})
 	for _, version := range versions {
-		table.AddRow(version.String())
+		table.Append([]string{version.String()})
 	}
-	fmt.Println(table)
-	fmt.Println()
+	table.Render()
 }
 
 func getPrettySchemaDef(schema *model.Schema) (string, error) {

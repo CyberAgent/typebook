@@ -31,23 +31,33 @@ matrix:
         - sbt ++$TRAVIS_SCALA_VERSION test
 
     - language: go
-      go: 1.8
-      before_install:
-        - sudo wget https://github.com/golang/dep/releases/download/v0.3.1/dep-linux-amd64 -O /usr/local/bin/dep
-        - sudo chmod +x /usr/local/bin/dep
-      install:
-        - cd $TRAVIS_BUILD_DIR/client/go && dep ensure
-      script:
-        - cd $TRAVIS_BUILD_DIR/client/go && go vet  . ./model
-        - cd $TRAVIS_BUILD_DIR/client/go && go test . ./model
-
-    - language: go
       go: 1.9
       before_install:
-        - sudo wget https://github.com/golang/dep/releases/download/v0.3.1/dep-linux-amd64 -O /usr/local/bin/dep
+        - sudo wget https://github.com/golang/dep/releases/download/v0.3.2/dep-linux-amd64 -O /usr/local/bin/dep
         - sudo chmod +x /usr/local/bin/dep
+        - mv $GOPATH/src/github.com/CyberAgent $GOPATH/src/github.com/cyberagent
+        - export TRAVIS_BUILD_DIR=$HOME/gopath/src/github.com/cyberagent/typebook
+        - cd $TRAVIS_BUILD_DIR
       install:
-        - cd $TRAVIS_BUILD_DIR/client/go && dep ensure
+        - cd $TRAVIS_BUILD_DIR/client/go && dep ensure -v
+        - cd $TRAVIS_BUILD_DIR/cli/tb && dep ensure -v
       script:
-        - cd $TRAVIS_BUILD_DIR/client/go && go vet  . ./model
-        - cd $TRAVIS_BUILD_DIR/client/go && go test . ./model
+        - cd $TRAVIS_BUILD_DIR && go vet ./...
+        - cd $TRAVIS_BUILD_DIR && go test ./...
+
+    - language: go
+      go: 1.8
+      before_install:
+        - sudo wget https://github.com/golang/dep/releases/download/v0.3.2/dep-linux-amd64 -O /usr/local/bin/dep
+        - sudo chmod +x /usr/local/bin/dep
+        - mv $GOPATH/src/github.com/CyberAgent $GOPATH/src/github.com/cyberagent
+        - export TRAVIS_BUILD_DIR=$HOME/gopath/src/github.com/cyberagent/typebook
+        - cd $TRAVIS_BUILD_DIR
+      install:
+        - cd $TRAVIS_BUILD_DIR/client/go && dep ensure -v
+        - cd $TRAVIS_BUILD_DIR/cli/tb && dep ensure -v
+      script:
+        - cd $TRAVIS_BUILD_DIR/client/go && go vet . ./model/...
+        - cd $TRAVIS_BUILD_DIR/client/go && go test . ./model/...
+        - cd $TRAVIS_BUILD_DIR/cli/tb && go vet . ./cmd/...
+        - cd $TRAVIS_BUILD_DIR/cli/tb && go test . ./cmd/...
