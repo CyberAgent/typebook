@@ -39,9 +39,9 @@ const (
 var subjectCreateCmd = &cobra.Command{
 	Use:   "create $subject",
 	Short: "create a subject",
-	Long:  `Create a subject.
+	Long: `Create a subject.
 Subject is a unit of data set. Schemas are evolved under a subject.`,
-	Args:  cobra.ExactArgs(1),
+	Args: cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		viper.BindPFlag(descriptionKey, cmd.Flags().Lookup(descriptionKey))
 	},

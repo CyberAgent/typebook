@@ -35,9 +35,9 @@ import (
 var subjectDeleteCmd = &cobra.Command{
 	Use:   "delete $subject",
 	Short: "delete a subject",
-	Long:  `Delete a subject.
+	Long: `Delete a subject.
 If some schemas remains under the subject, this command will fail.`,
-	Args:  cobra.ExactArgs(1),
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		name := args[0]

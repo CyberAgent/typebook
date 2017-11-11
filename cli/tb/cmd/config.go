@@ -23,9 +23,10 @@
 package cmd
 
 import (
-	"fmt"
+	"bytes"
+	"os"
 
-	"github.com/gosuri/uitable"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
 	"github.com/cyberagent/typebook/client/go/model"
@@ -42,18 +43,19 @@ func init() {
 }
 
 func showConfig(conf *model.Config) {
-	table := uitable.New()
-	table.AddRow("PROPERTY", "VALUE")
-	table.AddRow(model.CompatibilityProp, conf.Compatibility)
-	fmt.Println(table)
-	fmt.Println()
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"PROPERTY", "VALUE"})
+	table.Append([]string{model.CompatibilityProp, conf.Compatibility})
+	table.Render()
 }
 
 func propertyDescriptions() string {
-	table := uitable.New()
-	table.AddRow("PROPERTY", "DESCRIPTION")
+	buf := new(bytes.Buffer)
+	table := tablewriter.NewWriter(buf)
+	table.SetHeader([]string{"PROPERTY", "DESCRIPTION"})
 	for prop, description := range model.Properties {
-		table.AddRow(prop, description)
+		table.Append([]string{prop, description})
 	}
-	return table.String()
+	table.Render()
+	return buf.String()
 }

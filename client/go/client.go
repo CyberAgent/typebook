@@ -26,6 +26,10 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
+var (
+	DisableTransportSwap = false
+)
+
 type Client struct {
 	*subjectClient
 	*configClient
@@ -37,6 +41,8 @@ type Client struct {
 // endpoint should be in the form of `host:port`.
 // Client instances should create for each goroutine to send multiple requests concurrently.
 func NewClient(endpoint string) *Client {
+	gorequest.DisableTransportSwap = DisableTransportSwap
+
 	baseClient := &baseClient{endpoint, gorequest.New()}
 	return &Client{
 		&subjectClient{baseClient},

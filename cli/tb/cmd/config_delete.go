@@ -65,7 +65,7 @@ The deleted property will be back to the default.`, propertyDescriptions()),
 			if _, err := client.DeleteProperty(subject, property); err != nil {
 				exitWithError(err)
 			}
-			fmt.Printf("Config `%s` of the subject `%s` is deleted successfully", property, subject)
+			fmt.Printf("Config `%s` of the subject `%s` is deleted successfully. \n", property, subject)
 		} else {
 			exitWithError(fmt.Errorf("too much arguments"))
 		}

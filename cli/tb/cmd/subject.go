@@ -23,11 +23,12 @@
 package cmd
 
 import (
-	"fmt"
+	"os"
+
+	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
 
 	"github.com/cyberagent/typebook/client/go/model"
-	"github.com/gosuri/uitable"
-	"github.com/spf13/cobra"
 )
 
 var subjectCmd = &cobra.Command{
@@ -41,11 +42,10 @@ func init() {
 }
 
 func showSubjects(subjects ...*model.Subject) {
-	table := uitable.New()
-	table.AddRow("NAME", "DESCRIPTION")
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"NAME", "DESCRIPTION"})
 	for _, subject := range subjects {
-		table.AddRow(subject.Name, subject.Description)
+		table.Append([]string{subject.Name, subject.Description})
 	}
-	fmt.Println(table)
-	fmt.Println()
+	table.Render()
 }
