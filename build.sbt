@@ -55,6 +55,7 @@ lazy val commonSettings = Seq(
   ),
   run in Compile := Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run)),
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+  javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   test in assembly := {},
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
@@ -79,6 +80,7 @@ lazy val core = (project in file("core")).
     ),
     publishArtifact := false
   )
+
 
 lazy val server = (project in file("server")).
   enablePlugins(DockerPlugin).
