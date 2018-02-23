@@ -28,7 +28,7 @@ import scala.language.postfixOps
 import com.twitter.conversions.time._
 import com.twitter.finagle.{Mysql => TMysql}
 import com.twitter.finagle.client.DefaultPool
-import com.twitter.finagle.mysql.{Client, Cursors, Transactions}
+import com.twitter.finagle.mysql.{Client, Transactions}
 import io.circe._
 import io.circe.syntax._
 
@@ -37,12 +37,12 @@ import jp.co.cyberagent.typebook.config.BackendDbConfig
 
 object Mysql {
 
-  def default(): Client with Transactions with Cursors = {
+  def default(): Client with Transactions = {
     val conf = BackendDbConfig()
     standard(conf)
   }
 
-  def standard(conf: BackendDbConfig): Client with Transactions with Cursors = TMysql.client
+  def standard(conf: BackendDbConfig): Client with Transactions = TMysql.client
     .withCredentials(conf.user, conf.password.orNull)
     .withDatabase(conf.database)
     .configured(DefaultPool.Param(

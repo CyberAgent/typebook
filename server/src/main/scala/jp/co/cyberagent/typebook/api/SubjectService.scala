@@ -21,8 +21,8 @@
 
 package jp.co.cyberagent.typebook.api
 
-import com.twitter.io.Buf
 import io.finch._
+import io.finch.syntax._
 
 import jp.co.cyberagent.typebook.db.{DefaultMySQLBackend, MySQLBackend, SubjectClient}
 import jp.co.cyberagent.typebook.db.SubjectClient.AffectedRows
@@ -30,8 +30,8 @@ import jp.co.cyberagent.typebook.model.{ErrorResponse, Subject}
 
 
 object SubjectService extends SubjectServiceTrait with DefaultMySQLBackend {
-  def apply() = create :+: readField :+: read :+:
-                readAll :+: update :+: del
+  val jsonEndpoints = read :+: readAll
+  val textEndpoints = create :+: readField :+: update :+: del
 }
 
 trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
@@ -47,7 +47,7 @@ trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val create: Endpoint[InsertId] = post(
     "subjects" :: path[String] :: stringBodyOption
   ).as[Subject] mapOutputAsync { subject =>
-    SubjectClient.create(subject).map(Created(_).withHeader("Content-Type" -> "text/plain"))
+    SubjectClient.create(subject).map(Created)
   } handle backendErrors
 
 
@@ -72,11 +72,11 @@ trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
     * available values for the param `field` are  `name` and `description`
     * @return
     */
-  val readField: Endpoint[Buf] = get(
+  val readField: Endpoint[String] = get(
     "subjects" :: path[String] :: paramExists("field")
   ) { (subject: String, field: String) =>
     SubjectClient.read(subject, field).map {
-      case Some(value) => Ok(Buf.Utf8(value)).withHeader("Content-Type" -> "text/plain")
+      case Some(value) => Ok(value)
       case None => NotFound(ErrorResponse(404, s"Value of $field of subject $subject is not found"))
     }
   } handle backendErrors
@@ -105,7 +105,7 @@ trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val update: Endpoint[AffectedRows] = put(
     "subjects" :: path[String] :: stringBodyOption
   ).as[Subject] mapOutputAsync { subject =>
-    SubjectClient.update(subject.name, subject.description).map(Ok(_).withHeader("Content-Type" -> "text/plain"))
+    SubjectClient.update(subject.name, subject.description).map(Ok)
   } handle backendErrors
 
 
@@ -118,7 +118,7 @@ trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val del: Endpoint[AffectedRows] = delete(
     "subjects" :: path[String]
   ) { name: String =>
-    SubjectClient.delete(name).map(Ok(_).withHeader("Content-Type" -> "text/plain"))
+    SubjectClient.delete(name).map(Ok)
   } handle backendErrors
 
 }

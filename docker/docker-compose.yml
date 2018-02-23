@@ -2,9 +2,9 @@ version: '3'
 
 services:
   backend-db:
-    image: "mysql:5.7.19"
+    image: "mysql:5.7.21"
     healthcheck:
-      test: ["CMD", "mysql", "-u", "typebook", "-p", "-e", "quit"]
+      test: ["CMD", "mysql", "-u", "typebook", "--password=typebook", "-e", "quit"]
       interval: "15s"
       timeout: "5s"
       retries: 5

@@ -139,13 +139,10 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
 
 
           // read a current compatibility value
-          val registryCompatibilityBuf1 = TestConfigService.readProperty(
+          val registryCompatibility1 = TestConfigService.readProperty(
             Input.get(s"/config/$subjectName/properties/compatibility")
           ).awaitValueUnsafe(awaitTime).get
 
-          buffer = new Array[Byte](registryCompatibilityBuf1.length)
-          registryCompatibilityBuf1.write(buffer, 0)
-          val registryCompatibility1 = new String(buffer)
           log.info(s"RegistryCompatibility1: $registryCompatibility1")
           registryCompatibility1 should equal("FULL")
 
@@ -159,13 +156,10 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
 
 
           // read a current compatibility value
-          val registryCompatibilityBuf2 = TestConfigService.readProperty(
+          val registryCompatibility2 = TestConfigService.readProperty(
             Input.get(s"/config/$subjectName/properties/compatibility")
           ).awaitValueUnsafe(awaitTime).get
 
-          buffer = new Array[Byte](registryCompatibilityBuf2.length)
-          registryCompatibilityBuf2.write(buffer, 0)
-          val registryCompatibility2 = new String(buffer)
           log.info(s"RegistryCompatibility2: $registryCompatibility2")
           registryCompatibility2 should equal("BACKWARD")
 
@@ -179,13 +173,10 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
 
 
           // read a current compatibility value
-          val registryCompatibilityBuf3 = TestConfigService.readProperty(
+          val registryCompatibility3 = TestConfigService.readProperty(
             Input.get(s"/config/$subjectName/properties/compatibility")
           ).awaitValueUnsafe(awaitTime).get
 
-          buffer = new Array[Byte](registryCompatibilityBuf3.length)
-          registryCompatibilityBuf3.write(buffer, 0)
-          val registryCompatibility3 = new String(buffer)
           log.info(s"RegistryCompatibility3: $registryCompatibility3")
           registryCompatibility3 should equal("FORWARD")
 
@@ -198,13 +189,10 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
           updatedRows4 should equal(1L)
 
           // read a current compatibility value
-          val registryCompatibilityBuf4 = TestConfigService.readProperty(
+          val registryCompatibility4 = TestConfigService.readProperty(
             Input.get(s"/config/$subjectName/properties/compatibility")
           ).awaitValueUnsafe(awaitTime).get
 
-          buffer = new Array[Byte](registryCompatibilityBuf4.length)
-          registryCompatibilityBuf4.write(buffer, 0)
-          val registryCompatibility4 = new String(buffer)
           log.info(s"RegistryCompatibility4: $registryCompatibility4")
           registryCompatibility4 should equal("NONE")
 
@@ -257,12 +245,10 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
           log.info(s"default config for subject $subjectName is $actual")
           actual should equal (RegistryConfig.default)
 
-          val actualPropBuf = TestConfigService.readProperty(
+          val actualProp = TestConfigService.readProperty(
             Input.get(s"/config/$subjectName/properties/${RegistryConfig.Compatibility}")
           ).awaitValueUnsafe(awaitTime).get
-          buffer = new Array[Byte](actualPropBuf.length)
-          actualPropBuf.write(buffer, 0)
-          val actualProp = new String(buffer)
+
           log.info(s"default compatibility value for subject $subjectName is $actualProp")
           actualProp should equal (RegistryConfig.default.compatibility.toString)
         }

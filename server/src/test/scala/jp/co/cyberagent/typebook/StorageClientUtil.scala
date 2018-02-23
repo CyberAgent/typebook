@@ -2,7 +2,7 @@ package jp.co.cyberagent.typebook
 
 import scala.language.postfixOps
 
-import com.palantir.docker.compose.DockerComposition
+import com.palantir.docker.compose.DockerComposeRule
 import com.twitter.finagle.{Mysql => TMysql}
 import com.twitter.finagle.mysql.{QueryRequest, Client => MysqlClient}
 import com.twitter.util.{Await, Stopwatch}
@@ -28,7 +28,7 @@ trait StorageClientUtil { self: StorageBackend =>
   }
 
   // Create MySQL Client and wait until database is available
-  def withDbClient(dc: DockerComposition, tries: Int = 10)(proc: MysqlClient => Any): Any = {
+  def withDbClient(dc: DockerComposeRule, tries: Int = 10)(proc: MysqlClient => Any): Any = {
     val conf = BackendDbConfig(getStorageHostPort(dc))
     waitUntilDbBecomesAvailable(conf, tries)
     val client = Mysql.standard(conf)
