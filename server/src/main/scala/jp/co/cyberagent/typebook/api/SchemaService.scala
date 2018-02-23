@@ -27,6 +27,7 @@ import com.twitter.logging.Logger
 import com.twitter.util.Future
 import io.finch._
 import io.finch.circe._
+import io.finch.syntax._
 import org.apache.avro.{Schema => AvroSchema}
 
 import jp.co.cyberagent.typebook.compatibility.{CompatibilityUtil, SchemaCompatibility}
@@ -37,9 +38,8 @@ import jp.co.cyberagent.typebook.version.{SemanticVersion, VersioningRule}
 
 
 object SchemaService extends SchemaServiceTrait with DefaultMySQLBackend {
-
-  def apply() = create :+: lookup :+: lookupAll :+: readById :+:
-                readByVersion :+: readVersions :+: checkCompatibility
+  val jsonEndpoints = create :+: lookup :+: lookupAll :+: readById :+:
+    readByVersion :+: readVersions :+: checkCompatibility
 }
 
 

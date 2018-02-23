@@ -4,7 +4,7 @@ import java.util.function.Function
 
 import scala.language.postfixOps
 
-import com.palantir.docker.compose.DockerComposition
+import com.palantir.docker.compose.{DockerComposeRule, ImmutableDockerComposeRule}
 import com.palantir.docker.compose.configuration.{DockerComposeFiles, ProjectName}
 import com.palantir.docker.compose.connection.{DockerMachine, DockerPort}
 import com.palantir.docker.compose.connection.waiting.HealthChecks
@@ -20,8 +20,8 @@ trait SchemaRegistryBackend extends StorageBackend with RuleFixture with Eventua
   final val conf = HttpServerConfig()
 
   // Call docker-compose and wait by waitSec after complete building
-  override def dockerComposition(logDir: String): DockerComposition = DockerComposition
-    .of("docker/docker-compose.yml")
+  override def dockerComposition(logDir: String): ImmutableDockerComposeRule = DockerComposeRule.builder()
+    .file("docker/docker-compose.yml")
     .projectName(ProjectName.fromString(Project))
     .waitingForService("backend-db", HealthChecks.toHaveAllPortsOpen)
     .waitingForService("schema-registry-server", HealthChecks.toRespondOverHttp(conf.listenPort, new Function[DockerPort, String] {
@@ -38,9 +38,9 @@ trait SchemaRegistryBackend extends StorageBackend with RuleFixture with Eventua
   def dockerComposeKill(): Unit = defaultDockerCompose().kill()
 
 
-  def getServerEndpoint(dc: DockerComposition): String = {
-    val dockerPort = dc.portOnContainerWithInternalMapping("schema-registry-server", conf.listenPort)
-    s"${dockerPort.getIp}:${dockerPort.getExternalPort}"
+  def getServerEndpoint(dc: DockerComposeRule): String = {
+    val port = dc.containers().container("typebook").port(conf.listenPort)
+    s"${port.getIp}:${port.getExternalPort}"
   }
 
 }

@@ -24,15 +24,14 @@ package jp.co.cyberagent.typebook.api
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finagle.stats.DefaultStatsReceiver
+import com.twitter.io.Buf
 import com.twitter.logging.Logger
 import com.twitter.util.Future
+import io.finch
 import io.finch._
+import io.finch.syntax._
 
 object RegistryService {
-
-    import io.circe.generic.auto._
-    import io.finch.circe._
-    import jp.co.cyberagent.typebook.api.ErrorHandling.errorEncoder
 
     private val log = Logger.get(this.getClass)
 
@@ -54,11 +53,18 @@ object RegistryService {
     }
 
     // for health checking
-    val health: Endpoint[String] = get("health") {
-        Ok("OK")
-    }
+    val health: Endpoint[String] = get("health") apply Ok("OK")
+
+
+    import io.finch.circe._
+    import io.circe.generic.auto._
+    import jp.co.cyberagent.typebook.api.ErrorHandling.errorEncoder
+    implicit val longTextEncoder: finch.Encode.Text[Long] = Encode.text[Long]((l, cs) => Buf.ByteArray.Owned(l.toString.getBytes(cs)) )
 
     def apply(): Service[Request, Response] = AccessLogger.andThen(AccessCount.andThen(
-        (SubjectService() :+: SchemaService() :+: ConfigService() :+: health).toService
+        Bootstrap.configure(includeServerHeader = false)
+          .serve[Application.Json](SubjectService.jsonEndpoints :+: ConfigService.jsonEndpoints :+: SchemaService.jsonEndpoints)
+          .serve[Text.Plain](SubjectService.textEndpoints :+: ConfigService.textEndpoints)
+          .toService
     ))
 }

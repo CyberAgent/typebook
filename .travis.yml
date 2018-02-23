@@ -3,7 +3,7 @@ matrix:
   include:
 
     - language: scala
-      scala: 2.12.3
+      scala: 2.12.4
       jdk: oraclejdk8
       services:
         - docker
@@ -18,7 +18,7 @@ matrix:
         - sbt ++$TRAVIS_SCALA_VERSION test
 
     - language: scala
-      scala: 2.11.11
+      scala: 2.11.12
       jdk: oraclejdk8
       services:
         - docker

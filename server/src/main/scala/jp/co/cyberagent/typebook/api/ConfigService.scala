@@ -23,11 +23,11 @@ package jp.co.cyberagent.typebook.api
 
 import java.util.NoSuchElementException
 
-import com.twitter.io.Buf
 import com.twitter.logging.Logger
 import com.twitter.util.Future
 import io.circe.DecodingFailure
 import io.finch._
+import io.finch.syntax._
 import io.finch.circe._
 
 import jp.co.cyberagent.typebook.db.{ConfigClient, DefaultMySQLBackend, MySQLBackend, SubjectClient}
@@ -35,8 +35,8 @@ import jp.co.cyberagent.typebook.model.{Config, ErrorResponse, RegistryConfig}
 
 
 object ConfigService extends ConfigServiceTrait with DefaultMySQLBackend {
-  def apply() = set :+: setProperty :+: read :+:
-                readProperty :+: del :+: delProperty
+  val textEndpoints = set :+: setProperty :+: readProperty :+: del :+: delProperty
+  val jsonEndpoints = read
 }
 
 trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
@@ -55,7 +55,7 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val set: Endpoint[UpdatedRows] = put(
     "config" :: path[String] :: jsonBody[RegistryConfig]
   ) { (subject: String, config: RegistryConfig) =>
-    ConfigClient.set(subject, config).map(Ok(_).withHeader("Content-Type" -> "text/plain"))
+    ConfigClient.set(subject, config).map(Ok)
   } handle {
     case _: DecodingFailure =>
       val msg = "Invalid config"
@@ -75,7 +75,7 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val setProperty: Endpoint[UpdatedRows] = put(
     "config" :: path[String] :: "properties" :: path[String] :: stringBody
   ).as[Config] mapOutputAsync { config =>
-    ConfigClient.set(config.subject, RegistryConfig.fromSeq(Seq(config))).map(Ok(_).withHeader("Content-Type" -> "text/plain")) // FIXME only update to weaker restriction should be allowed ???
+    ConfigClient.set(config.subject, RegistryConfig.fromSeq(Seq(config))).map(Ok) // FIXME only update to weaker restriction should be allowed ???
   } handle {
     case ns: NoSuchElementException =>
       val msg = "Invalid compatibility value is provided"
@@ -105,15 +105,15 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
     * GET /config/(subject: string)/properties/(property: string)
     * Read a value for a specific property
     */
-  val readProperty: Endpoint[Buf] = get(
+  val readProperty: Endpoint[String] = get(
     "config" :: path[String] ::"properties" :: path[String].should("be a valid property")(RegistryConfig.Properties.contains)
   ) { (subject: String, property: String) =>
     ConfigClient.readProperty(subject, property).map {
       case None => RegistryConfig.default.toMap.get(property) match { // if not configured, use default as a fallback.
         case None => NotFound(ErrorResponse(422, "Invalid Configuration Key"))
-        case Some(value) => Ok(Buf.Utf8(value)).withHeader("Content-Type" -> "text/plain")
+        case Some(value) => Ok(value)
       }
-      case Some(value) => Ok(Buf.Utf8(value)).withHeader("Content-Type" -> "text/plain")
+      case Some(value) => Ok(value)
     }
   } handle backendErrors
 
@@ -125,7 +125,7 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val del: Endpoint[DeletedRows] = delete(
     "config" :: path[String]
   ) { subject: String =>
-    ConfigClient.delete(subject).map(Ok(_).withHeader("Content-Type" -> "text/plain"))
+    ConfigClient.delete(subject).map(Ok)
   } handle backendErrors
 
 
@@ -136,7 +136,7 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val delProperty: Endpoint[DeletedRows] = delete(
     "config" :: path[String] :: "properties" :: path[String]
   ) { (subject: String, property: String) =>
-    ConfigClient.deleteProperty(subject, property).map(Ok(_).withHeader("Content-Type" -> "text/plain"))
+    ConfigClient.deleteProperty(subject, property).map(Ok)
   } handle backendErrors
 
 }

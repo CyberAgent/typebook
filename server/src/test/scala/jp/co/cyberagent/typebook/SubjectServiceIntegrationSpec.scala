@@ -64,22 +64,18 @@ class SubjectServiceIntegrationSpec extends FlatSpec with StorageBackend with St
 
 
           // read a specific field
-          val nameBuf = TestSubjectService.readField(
+          val name = TestSubjectService.readField(
             Input.get(s"/subjects/$subjectName", ("field", "name"))
           ).awaitValueUnsafe(awaitTime).get
-          buffer = new Array[Byte](nameBuf.length)
-          nameBuf.write(buffer, 0)
-          val name = new String(buffer)
+
           log.info(s"name is $name")
           name should equal (subjectName)
 
 
-          val descriptionBuf = TestSubjectService.readField(
+          val description = TestSubjectService.readField(
             Input.get(s"/subjects/$subjectName", ("field", "description"))
           ).awaitValueUnsafe(awaitTime).get
-          buffer = new Array[Byte](descriptionBuf.length)
-          descriptionBuf.write(buffer, 0)
-          val description = new String(buffer)
+
           log.info(s"description is $description")
           description should equal (subjectDescription)
         }

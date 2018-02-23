@@ -35,7 +35,7 @@ import jp.co.cyberagent.typebook.version.SemanticVersion
 package object model {
   type Id = Long
 
-  implicit val jsonCodecConfig: Configuration = Configuration.default.withSnakeCaseKeys
+  implicit val jsonCodecConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 
   implicit val subjectDecoder: Decoder[Subject] = deriveDecoder[Subject].map( subject => subject.description match {
     case Some(desc) if desc.isEmpty => subject.copy(description = None)

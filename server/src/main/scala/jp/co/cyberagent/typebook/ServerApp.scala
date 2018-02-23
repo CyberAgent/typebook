@@ -35,20 +35,20 @@ object ServerApp extends TwitterServer with DefaultMySQLBackend {
   val conf = HttpServerConfig()
 
   lazy val httpServer: ListeningServer = Http.server
-    .configured(Http.Netty3Impl)
+    .configuredParams(Http.Http2)
     .withStatsReceiver(statsReceiver)
     .serve(s":${conf.listenPort}", RegistryService() )
 
   private def shutdown(): Unit = {
-    log.info("TypeBook is shutting down...")
+    info("TypeBook is shutting down...")
     Await.ready(httpServer.close())
   }
 
   def main(): Unit = {
-    log.info("Initializing Database...")
+    info("Initializing Database...")
     TableDefinition.initializeTables()
 
-    log.info("TypeBook is starting up...")
+    info("TypeBook is starting up...")
     onExit(shutdown())
     Await.ready(httpServer)
   }
