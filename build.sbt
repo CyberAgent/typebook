@@ -1,6 +1,6 @@
 
-scalaVersion in ThisBuild := "2.12.4"
-crossScalaVersions := Seq("2.12.4", "2.11.12")
+scalaVersion in ThisBuild := "2.12.5"
+crossScalaVersions := Seq("2.12.5", "2.11.12")
 publishArtifact := false
 
 // license settings
@@ -13,7 +13,7 @@ val dockerImageVersion = taskKey[String]("the version for docker image of schema
 
 // The versions for dependency libraries
 val avroVersion = "1.8.2"
-val circeVersion = "0.9.1"
+val circeVersion = "0.9.3"
 val ficusVersion = "1.4.3"
 val twitterVersion = "18.3.0"
 val finchVersion = "0.18.1"
