@@ -64,7 +64,7 @@ object RegistryService {
     def apply(): Service[Request, Response] = AccessLogger.andThen(AccessCount.andThen(
         Bootstrap.configure(includeServerHeader = false)
           .serve[Application.Json](SubjectService.jsonEndpoints :+: ConfigService.jsonEndpoints :+: SchemaService.jsonEndpoints)
-          .serve[Text.Plain](SubjectService.textEndpoints :+: ConfigService.textEndpoints)
+          .serve[Text.Plain](SubjectService.textEndpoints :+: ConfigService.textEndpoints :+: health)
           .toService
     ))
 }
