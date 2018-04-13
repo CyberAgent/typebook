@@ -3,7 +3,7 @@ matrix:
   include:
 
     - language: scala
-      scala: 2.12.4
+      scala: 2.12.5
       jdk: oraclejdk8
       services:
         - docker

@@ -15,8 +15,8 @@ val dockerImageVersion = taskKey[String]("the version for docker image of schema
 val avroVersion = "1.8.2"
 val circeVersion = "0.9.3"
 val ficusVersion = "1.4.3"
-val twitterVersion = "18.3.0"
-val finchVersion = "0.18.1"
+val twitterVersion = "18.4.0"
+val finchVersion = "0.19.0"
 
 // The versions for test dependency libraries
 val dockerComposeRuleVersion = "0.33.0"
