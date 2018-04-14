@@ -27,8 +27,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 var subjectUpdateCmd = &cobra.Command{
@@ -44,7 +42,7 @@ var subjectUpdateCmd = &cobra.Command{
 		name := args[0]
 		description := viper.GetString("description")
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if updatedRows, err := client.UpdateDescription(name, description); err != nil {
 			exitWithError(err)
 		} else if updatedRows == 1 {

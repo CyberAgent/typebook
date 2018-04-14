@@ -29,7 +29,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	typebook "github.com/cyberagent/typebook/client/go"
 	"github.com/cyberagent/typebook/client/go/model"
 )
 
@@ -59,7 +58,7 @@ Available properties are following for now,
 			exitWithUsage(cmd, fmt.Errorf("subject is not specified"))
 		}
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if len(args) == 1 { // set whole config
 			content, err := valueOrFromPath(args[0])
 			if err != nil {

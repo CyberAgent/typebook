@@ -24,9 +24,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
-	typebook "github.com/cyberagent/typebook/client/go"
 	"github.com/cyberagent/typebook/client/go/model"
 )
 
@@ -36,7 +34,7 @@ var subjectListCmd = &cobra.Command{
 	Long:  "Retrieve and show all existent subjects and their descriptions.",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if names, err := client.ListSubjects(); err != nil {
 			exitWithError(err)
 		} else {

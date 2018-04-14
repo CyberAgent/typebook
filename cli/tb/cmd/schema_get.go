@@ -29,7 +29,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	typebook "github.com/cyberagent/typebook/client/go"
 	"github.com/cyberagent/typebook/client/go/model"
 )
 
@@ -50,7 +49,7 @@ Available form of version is semantic version (e.g. v1.0.0) or major version (e.
 		subject := viper.GetString("subject")
 		version := viper.GetString("version")
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if id != -1 {
 			showSchemaDef(func() (*model.Schema, *model.Error) {
 				return client.GetSchemaById(id)

@@ -27,8 +27,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 // available options
@@ -50,7 +48,7 @@ Subject is a unit of data set. Schemas are evolved under a subject.`,
 		name := args[0]
 		description := viper.GetString("description")
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if id, err := client.CreateSubject(name, description); err != nil {
 			exitWithError(err)
 		} else if id == 0 {

@@ -33,6 +33,8 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -105,6 +107,12 @@ func exitWithUsage(cmd *cobra.Command, err error) {
 	fmt.Println(err.Error())
 	cmd.Usage()
 	os.Exit(1)
+}
+
+func newClient() *typebook.Client {
+	client := typebook.NewClient(viper.GetString("url"))
+	client.SuperAgent.Timeout(5000000000) // 5 sec
+	return client
 }
 
 func prettyJSON(v interface{}, indent int) ([]byte, error) {

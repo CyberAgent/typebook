@@ -27,8 +27,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 var schemaCreateCmd = &cobra.Command{
@@ -46,7 +44,7 @@ A path should begin with @.`,
 			exitWithUsage(cmd, fmt.Errorf("subject is not specified"))
 		}
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if content, err := valueOrFromPath(args[0]); err != nil {
 			exitWithError(err)
 		} else {
