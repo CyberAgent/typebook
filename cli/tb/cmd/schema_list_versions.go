@@ -27,8 +27,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 var schemaListVersionsCmd = &cobra.Command{
@@ -42,7 +40,7 @@ var schemaListVersionsCmd = &cobra.Command{
 			exitWithUsage(cmd, fmt.Errorf("subject is not specified"))
 		}
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if versions, err := client.ListVersions(subject); err != nil {
 			exitWithError(err)
 		} else {

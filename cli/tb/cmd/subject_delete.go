@@ -26,9 +26,6 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 // configDeleteCmd represents the delete command
@@ -42,7 +39,7 @@ If some schemas remains under the subject, this command will fail.`,
 
 		name := args[0]
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if deletedRows, err := client.DeleteSubject(name); err != nil {
 			exitWithError(err)
 		} else if deletedRows == 1 {

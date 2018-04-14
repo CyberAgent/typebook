@@ -23,9 +23,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	typebook "github.com/cyberagent/typebook/client/go"
 )
 
 // schemaGetCmd represents the get command
@@ -38,7 +35,7 @@ var subjectGetCmd = &cobra.Command{
 
 		name := args[0]
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if subject, err := client.GetSubject(name); err != nil {
 			exitWithError(err)
 		} else {

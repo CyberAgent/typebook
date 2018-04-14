@@ -34,6 +34,7 @@ type Client struct {
 	*subjectClient
 	*configClient
 	*schemaClient
+	*gorequest.SuperAgent
 }
 
 // NewClient create and instantiate a new Client object which can interact with
@@ -48,5 +49,6 @@ func NewClient(endpoint string) *Client {
 		&subjectClient{baseClient},
 		&configClient{baseClient},
 		&schemaClient{baseClient},
+		baseClient.SuperAgent,
 	}
 }

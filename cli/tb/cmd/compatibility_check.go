@@ -29,7 +29,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	typebook "github.com/cyberagent/typebook/client/go"
 	"github.com/cyberagent/typebook/client/go/model"
 )
 
@@ -59,7 +58,7 @@ Possible values for version is what represents major version (e.g. v1) or semant
 			exitWithError(err)
 		}
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if version == "" {
 			showIsCompatible(func() (*model.Compatibility, *model.Error) {
 				return client.CheckCompatibilityWithLatest(subject, string(content))

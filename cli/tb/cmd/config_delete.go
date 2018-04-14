@@ -28,7 +28,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	typebook "github.com/cyberagent/typebook/client/go"
 	"github.com/cyberagent/typebook/client/go/model"
 )
 
@@ -54,7 +53,7 @@ The deleted property will be back to the default.`, propertyDescriptions()),
 			exitWithUsage(cmd, fmt.Errorf("subject is not specified"))
 		}
 
-		client := typebook.NewClient(viper.GetString("url"))
+		client := newClient()
 		if len(args) == 0 { // config delete
 			if _, err := client.DeleteConfig(subject); err != nil {
 				exitWithError(err)
