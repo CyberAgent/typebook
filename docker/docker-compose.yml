@@ -22,8 +22,8 @@ services:
       - "backend-db"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
-      interval: "30s"
-      timeout: "120s"
+      interval: "10s"
+      timeout: "60s"
       retries: 5
     restart: "on-failure"
     ports:

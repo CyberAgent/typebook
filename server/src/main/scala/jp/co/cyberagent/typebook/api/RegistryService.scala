@@ -33,12 +33,14 @@ import io.finch.syntax._
 
 object RegistryService {
 
-    private val log = Logger.get(this.getClass)
+    private val log = Logger.get(getClass)
 
     object AccessLogger extends SimpleFilter[Request, Response] {
         override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
-            if (Method.Get != request.method) {
-                log.info(s"${request.method}, ${request.uri}, ${request.remoteSocketAddress}, ${request.contentString}")
+            val message = s"${request.method} ${request.uri} from ${request.remoteSocketAddress}"
+            request.method match {
+                case Method.Post | Method.Put| Method.Delete => log.info(message)
+                case _ => log.debug(message)
             }
             service(request)
         }

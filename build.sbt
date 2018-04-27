@@ -17,6 +17,7 @@ val circeVersion = "0.9.3"
 val ficusVersion = "1.4.3"
 val twitterVersion = "18.4.0"
 val finchVersion = "0.19.0"
+val logbackVersion = "1.2.3"
 
 // The versions for test dependency libraries
 val dockerComposeRuleVersion = "0.33.0"
@@ -93,6 +94,7 @@ lazy val server = (project in file("server")).
       "com.twitter" %% "finagle-mysql" % twitterVersion,
       "com.twitter" %% "finagle-stats" % twitterVersion,
       "com.twitter" %% "twitter-server" % twitterVersion,
+      "ch.qos.logback" % "logback-classic" % logbackVersion,
       "com.github.finagle" %% "finch-test" % finchVersion % Test,
       "com.palantir.docker.compose" % "docker-compose-rule-junit4" % dockerComposeRuleVersion % Test,
       "junit" % "junit" % junitVersion % Test,
