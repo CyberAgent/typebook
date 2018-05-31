@@ -1,6 +1,6 @@
 
-scalaVersion in ThisBuild := "2.12.5"
-crossScalaVersions := Seq("2.12.5", "2.11.12")
+scalaVersion in ThisBuild := "2.12.6"
+crossScalaVersions := Seq("2.12.6", "2.11.12")
 publishArtifact := false
 
 // license settings
@@ -15,8 +15,8 @@ val dockerImageVersion = taskKey[String]("the version for docker image of schema
 val avroVersion = "1.8.2"
 val circeVersion = "0.9.3"
 val ficusVersion = "1.4.3"
-val twitterVersion = "18.4.0"
-val finchVersion = "0.19.0"
+val twitterVersion = "18.5.0"
+val finchVersion = "0.20.0"
 val logbackVersion = "1.2.3"
 
 // The versions for test dependency libraries
@@ -108,7 +108,7 @@ lazy val server = (project in file("server")).
       val artifact: File = assembly.value
       val artifactTargetPath = s"$appDir/${artifact.getName}"
       new Dockerfile {
-        from("anapsix/alpine-java:8")
+        from("openjdk:8u151-jre-alpine3.7")
         copy(artifact, artifactTargetPath)
         entryPoint("java", "-jar", artifactTargetPath)
       }
