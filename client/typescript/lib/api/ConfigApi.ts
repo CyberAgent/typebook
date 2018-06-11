@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import * as model from './model/Model';
+import * as model from '../model/Model';
 
-export interface ConfigClient {
+export interface ConfigApi {
 
     setConfig(subject: string, config: model.RegistryConfig): Promise<number>;
 

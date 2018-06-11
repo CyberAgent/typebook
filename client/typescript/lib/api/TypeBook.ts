@@ -20,29 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import * as model from './model/Model';
+import { ConfigApi } from './ConfigApi';
+import { SchemaApi } from './SchemaApi';
+import { SubjectApi } from './SubjectApi';
 
-export interface SchemaClient {
-
-    registerSchema(subject: string, definition: string): Promise<model.SchemaId>;
-
-    lookupSchema(subject: string, definition: string): Promise<model.Schema>;
-
-    lookupAllSchemas(subject: string, definition: string): Promise<Array<model.Schema>>;
-
-    getSchemaById(id: number): Promise<model.Schema>;
-
-    getLatestSchema(subject: string): Promise<model.Schema>;
-
-    getSchemaByMajorVersion(subject: string, major: number): Promise<model.Schema>;
-
-    getSchemaByVersion(subject: string, version: model.SemanticVersion): Promise<model.Schema>;
-
-    listVersions(subject: string): Promise<Array<model.SemanticVersion>>;
-
-    checkCompatibilityWithLatest(subject: string, definition: string): Promise<model.Compatibility>;
-
-    checkCompatibilityWithMajorVersion(subject: string, major: number, definition: string): Promise<model.Compatibility>;
-
-    checkCompatibilityWithVersion(subject: string, version: model.SemanticVersion, definition: string): Promise<model.Compatibility>;
-}
+export interface TypeBook extends ConfigApi, SchemaApi, SubjectApi {}

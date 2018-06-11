@@ -1,6 +1,6 @@
 import { test, TestContext } from 'ava';
 import axios from 'axios';
-import Client from '../../index';
+import { Client } from '../../index';
 
 const baseURL = 'http://bar.foo:8888';
 const client = Client.create(axios.create({

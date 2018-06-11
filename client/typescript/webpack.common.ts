@@ -5,13 +5,18 @@ import * as CleanWebpackPlugin from 'clean-webpack-plugin';
 
 const config: webpack.Configuration = {
     context: path.resolve(__dirname),
-    externals: [ excludeNodeModules() ],
     entry: {
         app: './index.ts',
     },
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'index.js',
+        libraryTarget: 'commonjs2'
+    },
+    externals: [ excludeNodeModules() ],
     module: {
         rules: [
-            { test: /\.ts$/, use: 'awesome-typescript-loader', exclude: ['/node_modules/'] }
+            { test: /\.ts$/, use: 'ts-loader' }
         ]
     },
     resolve: {

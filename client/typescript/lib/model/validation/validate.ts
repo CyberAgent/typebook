@@ -22,7 +22,7 @@
 
 import { validate as cvalidate, ValidationError as ClassValidationError, Validator } from 'class-validator';
 
-type ValidationErrors = Array<ClassValidationError | Error>;
+export type ValidationErrors = Array<ClassValidationError | Error>;
 export type ValidationResult = Promise<ValidationErrors>;
 const ValidationResult = Promise as {
     new (executor: (

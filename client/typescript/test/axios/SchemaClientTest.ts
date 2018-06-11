@@ -1,7 +1,7 @@
 import { test, TestContext } from 'ava';
 import axios from 'axios';
 import * as nock from 'nock';
-import Client from '../../index';
+import { Client } from '../../index';
 import * as model from '../../lib/model/Model';
 
 const baseURL = 'http://foo.bar:8888';
