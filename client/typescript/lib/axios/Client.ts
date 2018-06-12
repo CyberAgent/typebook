@@ -21,14 +21,14 @@
 // THE SOFTWARE.
 
 import { AxiosInstance } from 'axios';
-import { ClientInterface } from '../ClientInterface';
+import { TypeBook } from '../api/TypeBook';
 import SubjectClient from './SubjectClient';
 import ConfigClient from './ConfigClient';
 import SchemaClient from './SchemaClient';
 import * as model from '../model/Model';
-import mixin from '../mixin';
+import mixin from '../util/mixin';
 
-export default class Client implements ClientInterface {
+export class Client implements TypeBook {
 
     private client: AxiosInstance;
 
@@ -126,4 +126,4 @@ export default class Client implements ClientInterface {
 
 }
 
-mixin(Client, [SubjectClient, SchemaClient, SchemaClient, ConfigClient]);
+mixin(Client, [SubjectClient, SchemaClient, ConfigClient]);

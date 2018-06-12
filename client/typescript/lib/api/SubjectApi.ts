@@ -20,8 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { ConfigClient } from './ConfigClient';
-import { SchemaClient } from './SchemaClient';
-import { SubjectClient } from './SubjectClient';
+import * as model from '../model/Model';
 
-export interface ClientInterface extends ConfigClient, SchemaClient, SubjectClient {}
+export interface SubjectApi {
+
+    createSubject(name: string, description?: string): Promise<number>;
+
+    getSubject(name: string): Promise<model.Subject>;
+
+    listSubjects(): Promise<Array<string>>;
+
+    updateDescription(name: string, description?: string): Promise<number>;
+
+    deleteSubject(name: string): Promise<number>;
+}

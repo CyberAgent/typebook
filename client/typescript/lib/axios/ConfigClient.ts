@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 import { AxiosInstance } from 'axios';
-import { ConfigClient as ConfigClientInterface } from '../ConfigClient';
+import { ConfigApi as ConfigClientInterface } from '../api/ConfigApi';
 import * as model from '../model/Model';
 import validateObject, { validateNumber, validateString } from '../model/validation/validate';
 import ResponseHandler, { identity } from './AxiosResponseHandler';

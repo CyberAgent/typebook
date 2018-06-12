@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 import { AxiosInstance } from 'axios';
-import { SchemaClient as SchemaClientInterface } from '../SchemaClient';
+import { SchemaApi as SchemaClientInterface } from '../api/SchemaApi';
 import * as model from '../model/Model';
 import validateObject, { validateArray } from '../model/validation/validate';
 import ResponseHandler from './AxiosResponseHandler';

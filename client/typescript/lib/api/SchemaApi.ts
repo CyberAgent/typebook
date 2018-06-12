@@ -20,17 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import * as model from './model/Model';
+import * as model from '../model/Model';
 
-export interface SubjectClient {
+export interface SchemaApi {
 
-    createSubject(name: string, description?: string): Promise<number>;
+    registerSchema(subject: string, definition: string): Promise<model.SchemaId>;
 
-    getSubject(name: string): Promise<model.Subject>;
+    lookupSchema(subject: string, definition: string): Promise<model.Schema>;
 
-    listSubjects(): Promise<Array<string>>;
+    lookupAllSchemas(subject: string, definition: string): Promise<Array<model.Schema>>;
 
-    updateDescription(name: string, description?: string): Promise<number>;
+    getSchemaById(id: number): Promise<model.Schema>;
 
-    deleteSubject(name: string): Promise<number>;
+    getLatestSchema(subject: string): Promise<model.Schema>;
+
+    getSchemaByMajorVersion(subject: string, major: number): Promise<model.Schema>;
+
+    getSchemaByVersion(subject: string, version: model.SemanticVersion): Promise<model.Schema>;
+
+    listVersions(subject: string): Promise<Array<model.SemanticVersion>>;
+
+    checkCompatibilityWithLatest(subject: string, definition: string): Promise<model.Compatibility>;
+
+    checkCompatibilityWithMajorVersion(subject: string, major: number, definition: string): Promise<model.Compatibility>;
+
+    checkCompatibilityWithVersion(subject: string, version: model.SemanticVersion, definition: string): Promise<model.Compatibility>;
 }

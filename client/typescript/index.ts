@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 import { AxiosInstance } from 'axios';
-import { ClientInterface } from './lib/ClientInterface';
-import AxiosClient from './lib/axios/Client';
+import { TypeBook } from './lib/api/TypeBook';
+import { Client as AxiosClient } from './lib/axios/Client';
 
 export { Subject } from './lib/model/Subject';
 export { Compatibility, CompatibilityType } from './lib/model/Compatibility';
@@ -30,9 +30,10 @@ export { Property, Config, RegistryConfig } from './lib/model/Config';
 export { Schema, SchemaId } from './lib/model/Schema';
 export { SemanticVersion } from './lib/model/SemanticVersion';
 export { ErrorResponse } from './lib/model/ErrorResponse';
+export { TypeBook } from './lib/api/TypeBook';
 
-export default class Client {
-    static create(innerClient: AxiosInstance): ClientInterface {
-        return new AxiosClient(innerClient);
+export class Client {
+    static create(innerClient: AxiosInstance): TypeBook {
+        return new AxiosClient(innerClient) as TypeBook;
     }
 }

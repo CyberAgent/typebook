@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 import { AxiosInstance } from 'axios';
-import { SubjectClient as SubjectClientInterface } from '../SubjectClient';
+import { SubjectApi as SubjectClientInterface } from '../api/SubjectApi';
 import * as model from '../model/Model';
 import validateObject, { validateNumber, validateStringArray } from '../model/validation/validate';
 import ResponseHandler, { identity } from './AxiosResponseHandler';

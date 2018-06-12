@@ -2,12 +2,20 @@
   "name": "typebook-client",
   "version": "0.1.0",
   "description": "TypeBook client for TypeScript",
-  "main": "index.js",
+  "author": "saint1991 <se.mizuno.tech@gmail.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.ts",
-    "start": "webpack --mode development --config webpack.dev.ts && ts-node dist/dev.js",
+    "start": "webpack --mode development --config webpack.dev.ts && ts-node dist/index.js",
     "test": "webpack --mode development --config webpack.test.ts && ava --verbose",
-    "lint": "tslint -c tslint.json -p tsconfig.json"
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "clean": "rm -rf dist test/out"
   },
   "repository": {
     "type": "git",
@@ -19,8 +27,6 @@
     "avro",
     "schema registry"
   ],
-  "author": "saint1991",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CyberAgent/typebook/issues"
   },
@@ -29,25 +35,24 @@
     "@types/axios": "^0.14.0",
     "@types/clean-webpack-plugin": "^0.1.2",
     "@types/nock": "^9.1.3",
-    "@types/webpack": "^4.1.4",
+    "@types/webpack": "^4.4.0",
     "@types/webpack-merge": "^4.1.3",
     "@types/webpack-node-externals": "^1.6.3",
     "ava": "^0.25.0",
-    "awesome-typescript-loader": "^5.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "jshint": "^2.9.5",
-    "nock": "^9.2.5",
-    "ts-node": "^6.0.2",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.3",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.1.2",
+    "nock": "^9.3.2",
+    "ts-loader": "^4.4.1",
+    "ts-node": "^6.1.0",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.1",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.3",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "class-validator": "^0.8.5"
-  },
-  "typings": "index.d.ts"
+  }
 }
