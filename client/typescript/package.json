@@ -1,6 +1,6 @@
 {
   "name": "typebook-client",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "TypeBook client for TypeScript",
   "author": "saint1991 <se.mizuno.tech@gmail.com>",
   "license": "MIT",
@@ -13,9 +13,10 @@
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.ts",
     "start": "webpack --mode development --config webpack.dev.ts && ts-node dist/index.js",
+    "watch": "webpack --mode development --watch --config webpack.dev.ts",
     "test": "webpack --mode development --config webpack.test.ts && ava --verbose",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
-    "clean": "rm -rf dist test/out"
+    "docs": "typedoc --out dist/docs --target ES6 index.ts",
+    "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "repository": {
     "type": "git",

@@ -24,13 +24,39 @@ import * as model from '../model/Model';
 
 export interface SubjectApi {
 
+    /**
+     * Create a new subject under which schemas are evolved.
+     * @param {string} name a name of subject.
+     * @param {string} description a description of subject.
+     * @returns {Promise<number>} the number of created subject
+     */
     createSubject(name: string, description?: string): Promise<number>;
 
+    /**
+     * Get a subject by name.
+     * @param {string} name a name of subject
+     * @returns {Promise<Subject>} subject name and description.
+     */
     getSubject(name: string): Promise<model.Subject>;
 
+    /**
+     * Get a list of all subjects registered with this TypeBook.
+     * @returns {Promise<Array<string>>} a list of subject names registered with this TypeBook.
+     */
     listSubjects(): Promise<Array<string>>;
 
+    /**
+     * Update a description of specified subject.
+     * @param {string} name a name of subject
+     * @param {string} description new description for the subject
+     * @returns {Promise<number>} the number of updated descriptions = 1
+     */
     updateDescription(name: string, description?: string): Promise<number>;
 
+    /**
+     * Delete a specified subject.
+     * @param {string} name a name of subject to be deleted
+     * @returns {Promise<number>} the number of deleted subject.
+     */
     deleteSubject(name: string): Promise<number>;
 }

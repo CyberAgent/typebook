@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "lib": ["ES2015"],
+    "lib": ["es2015", "es2015.promise"],
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noUnusedLocals": false,

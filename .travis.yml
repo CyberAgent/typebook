@@ -62,7 +62,8 @@ matrix:
     - language: node_js
       node_js: "node"
       install:
-        - cd $TRAVIS_BUILD_DIR/client/typescript && npm install
+        - cd $TRAVIS_BUILD_DIR/client/typescript && npm install && npm install -g typedoc
       script:
         - cd $TRAVIS_BUILD_DIR/client/typescript && npm run lint
+        - cd $TRAVIS_BUILD_DIR/client/typescript && npm run docs
         - cd $TRAVIS_BUILD_DIR/client/typescript && npm test
