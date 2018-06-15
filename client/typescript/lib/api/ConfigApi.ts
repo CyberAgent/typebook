@@ -24,16 +24,52 @@ import * as model from '../model/Model';
 
 export interface ConfigApi {
 
+    /**
+     * Set an entire RegistryConfig that includes schema revolution policy to a specified subject.
+     * @param {string} subject name of subject to set a config
+     * @param {RegistryConfig} config
+     * @returns {Promise<number>}
+     */
     setConfig(subject: string, config: model.RegistryConfig): Promise<number>;
+
+    /**
+     * Set a specific property of RegistryConfig to a specified subject.
+     * @param {string} subject a name of subject to set a property.
+     * @param {Property} property a name of property.
+     * @param {string} value new value for property.
+     * @returns {Promise<number>} the number of updated properties
+     */
 
     setProperty(subject: string, property: model.Property, value: string): Promise<number>;
 
+    /**
+     * Get a Registry config set to a specified subject.
+     * @param {string} subject a name of subject
+     * @returns {Promise<RegistryConfig>} RegistryConfig of a subject
+     */
     getConfig(subject: string): Promise<model.RegistryConfig>;
 
+    /**
+     * Get a specific property of RegistryConfig of a specified subject.
+     * @param {string} subject a name of subject
+     * @param {Property} property a name of property
+     * @returns {Promise<string>}
+     */
     getProperty(subject: string, property: model.Property): Promise<string>;
 
+    /**
+     * Delete a entire RegistryConfig from a specified subject.
+     * @param {string} subject a name of subject
+     * @returns {Promise<number>} the number of deleted properties
+     */
     deleteConfig(subject: string): Promise<number>;
 
+    /**
+     * Delete a specific property of RegistryConfig from a specified subject.
+     * @param {string} subject a name of subject
+     * @param {Property} property a name of property
+     * @returns {Promise<number>} the number of deleted property
+     */
     deleteProperty(subject: string, property: model.Property): Promise<number>;
 
 }

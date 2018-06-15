@@ -31,3 +31,21 @@ client.createSubject('locations', 'history of user location')
     .then(() => client.listSubjects())
     .then((result) => console.log(result));
 ```
+
+## Build 
+
+```bash
+$ npm run build
+```
+
+## Test
+
+```bash
+$ npm test
+```
+
+## Generating docs
+
+```bash
+$ npm run docs
+```

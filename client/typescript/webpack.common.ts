@@ -26,7 +26,10 @@ const config: webpack.Configuration = {
         noEmitOnErrors: true
     },
     plugins: [
-        new CleanWebpackPlugin(['dist'])
+        new CleanWebpackPlugin([
+            path.resolve(__dirname, 'dist'),
+            path.resolve(__dirname, 'test/out')
+        ])
     ]
 };
 
