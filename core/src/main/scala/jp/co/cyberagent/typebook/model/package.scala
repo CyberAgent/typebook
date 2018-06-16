@@ -61,17 +61,16 @@ package object model {
     }
   }
 
-  import RegistryConfig._
   implicit val registryConfigEncoder: Encoder[RegistryConfig] = Encoder.instance[RegistryConfig] { conf =>
     Json.obj(
-      Compatibility -> Json.fromString(conf.compatibility.toString)
+      RegistryConfig.CompatibilityProperty -> Json.fromString(conf.compatibility.toString)
     )
   }
 
   implicit val registryConfigDecoder: Decoder[RegistryConfig] = Decoder.instance[RegistryConfig] { cursor =>
-    cursor.get[String](Compatibility) match {
+    cursor.get[String](RegistryConfig.CompatibilityProperty) match {
       case Left(ex) => Left(ex)
-      case Right(compatibilityStr) => allCatch withTry SchemaCompatibility.withName(compatibilityStr) match {
+      case Right(compatibilityStr) => allCatch withTry SchemaCompatibility.apply(compatibilityStr) match {
         case Failure(ex) => Left(DecodingFailure(ex.getMessage, cursor.history))
         case Success(compatibility) => Right(RegistryConfig(compatibility = compatibility))
       }

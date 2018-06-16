@@ -24,34 +24,36 @@ package jp.co.cyberagent.typebook.version
 import org.apache.avro.{Schema => AvroSchema}
 
 import jp.co.cyberagent.typebook.compatibility.CompatibilityUtil
-import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility.{FullCompatible, SchemaCompatibility, _}
+import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility
+import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility._
 import jp.co.cyberagent.typebook.model.Schema
 
 object VersioningRule {
 
   /**
-    * calculate next semantic version based on a schema definition to register
-    * and a set of the latest major version of schemas
+    * Calculate the version for given `schema` comply with the following policy.
+    *   1. Schemas under the same major version should have at least backward compatibility to ensure that
+    *      the latest schema is applicable to all datasets under the same major version.
+    *   2. Schemas under the same minor version should have full compatibility.
     * @param schema schema definition to version
     * @param latestMajorSchemas a set of the latest major version of schemas
     * @return
     */
-  def nextVersion(schema: AvroSchema, latestMajorSchemas: Seq[Schema]): SemanticVersion = {
-    val schemas = latestMajorSchemas.sortWith{ (s1, s2) => s1.version > s2.version } // sort in descending order by version
-    schemas.headOption match {
-      case None => SemanticVersion("v1.0.0") // if no existing schema, this is the first version
-      case Some(latestSchema) =>
-        schemas.foldLeft((latestSchema, FullCompatible)) { (acc, iterator) => // find the schema with lowest compatibility
-          val compatibility = CompatibilityUtil.calcCompatibility(schema)(iterator.avroSchema)
-          if (isLowerCompatibility(compatibility)(acc._2)) (iterator, compatibility) else acc
-        } match {
-          case (_, NotCompatible) | (_, ForwardCompatible) => latestSchema.version.majorUpdatedVersion // when NotCompatible or ForwardCompatible schema is found in the latest major version
-          case (lowestCompatibilitySchema, BackwardCompatible) if lowestCompatibilitySchema.version.minor == latestSchema.version.minor => latestSchema.version.minorUpdatedVersion
-          case _ => latestSchema.version.patchUpdatedVersion
+  def nextVersion(schema: AvroSchema)(latestMajorSchemas: Seq[Schema]): SemanticVersion = {
+    val comparisons = latestMajorSchemas.sortWith{ (s1, s2) => s1.version > s2.version } // sort in descending order by version
+    comparisons.headOption match {
+      case None => SemanticVersion(1, 0, 0) // if no existing schema, this is the first version
+      case Some(latest) =>                  // otherwise find the version which has the lowest compatibility
+        comparisons.foldLeft[(SemanticVersion, SchemaCompatibility)]((latest.version, FullCompatible)) { (lowest, comparison) =>
+          val compat = CompatibilityUtil.calcCompatibility(schema)(comparison.avroSchema)
+          if (isLowerCompatibility(compat)(lowest._2)) (comparison.version, compat) else lowest
+        } match { // determine the next version
+          case (_, NotCompatible) | (_, ForwardCompatible) => latest.version.majorUpdatedVersion                            // policy 1
+          case (lowest, BackwardCompatible) if lowest.minor == latest.version.minor => latest.version.minorUpdatedVersion   // policy 2
+          case _ => latest.version.patchUpdatedVersion                                                                      // policy 2
         }
     }
   }
-
   /**
     * check if `target`
     * @param target

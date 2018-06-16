@@ -24,19 +24,34 @@ package jp.co.cyberagent.typebook.compatibility
 import org.apache.avro.{Schema => AvroSchema, SchemaCompatibility => AvroSchemaCompatibility}
 import org.apache.avro.SchemaCompatibility.SchemaCompatibilityType._
 
-import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility.SchemaCompatibility
 import jp.co.cyberagent.typebook.model.Schema
 
 
 /**
   * 4 types of Avro schema compatibility
   */
-object SchemaCompatibility extends Enumeration {
-  type SchemaCompatibility = Value
-  final val NotCompatible = Value("NONE")
-  final val ForwardCompatible = Value("FORWARD")
-  final val BackwardCompatible = Value("BACKWARD")
-  final val FullCompatible = Value("FULL")
+sealed trait SchemaCompatibility
+object SchemaCompatibility  {
+  final case object NotCompatible extends SchemaCompatibility {
+    override def toString: String = "NONE"
+  }
+  final case object ForwardCompatible extends SchemaCompatibility {
+    override def toString: String = "FORWARD"
+  }
+  final case object BackwardCompatible extends SchemaCompatibility {
+    override def toString: String = "BACKWARD"
+  }
+  final case object FullCompatible extends SchemaCompatibility {
+    override def toString: String = "FULL"
+  }
+
+  def apply(name: String): SchemaCompatibility = name match {
+    case "NONE" => NotCompatible
+    case "FORWARD" => ForwardCompatible
+    case "BACKWARD" => BackwardCompatible
+    case "FULL" => FullCompatible
+    case _ => throw new NoSuchElementException(s"Value for $name not found")
+  }
 }
 
 
@@ -65,7 +80,7 @@ object CompatibilityUtil {
     }
 
   /**
-    * check the compatibility of `target` with `comparison`
+    * calculate the compatibility of `target` with `comparison`
     * BackwardCompatible means that a data encoded by `comparison` can be decoded with `target` but not vice versa
     * ForwardCompatible means that a data encoded by `target` can be decoded with `comparison` but not vice versa
     * FullCompatible means that a data encoded by either schema can be decoded by another one
@@ -85,9 +100,9 @@ object CompatibilityUtil {
     * @param restriction
     * @return
     */
-  def checkCompatibility(target: AvroSchema, existingSchemas: Seq[Schema], restriction: SchemaCompatibility.Value): Boolean =
-    existingSchemas.isEmpty || existingSchemas.forall { iterator =>
-      CompatibilityRestriction.isStrongerThanOrEqualTo(calcCompatibility(target)(iterator.avroSchema))(restriction)
+  def checkCompatibility(target: AvroSchema, existingSchemas: Seq[Schema], restriction: SchemaCompatibility): Boolean =
+    existingSchemas.isEmpty || existingSchemas.forall { schema =>
+      CompatibilityRestriction.isStrongerThanOrEqualTo(calcCompatibility(target)(schema.avroSchema))(restriction)
     }
   
 

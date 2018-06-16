@@ -61,7 +61,7 @@ class VersionSpec extends WordSpec {
 
     "the given schema set is empty" should {
       "return the v1.0.0" taggedAs UnitTest in {
-        val actual = VersioningRule.nextVersion(parse(totallyDifferentSchema), Seq.empty[Schema])
+        val actual = VersioningRule.nextVersion(parse(totallyDifferentSchema))(Seq.empty[Schema])
         actual should equal (SemanticVersion("v1.0.0"))
       }
     }
@@ -72,7 +72,7 @@ class VersionSpec extends WordSpec {
           Schema(1L, "test", SemanticVersion("v1.0.0"), originalSchema),
           Schema(2L, "test", SemanticVersion("v1.0.1"), compatiblyEvolvedSchema)
         )
-        val actual = VersioningRule.nextVersion(parse(originalSchema), schemas)
+        val actual = VersioningRule.nextVersion(parse(originalSchema))(schemas)
         actual should equal (SemanticVersion("v1.0.2"))
       }
     }
@@ -84,7 +84,7 @@ class VersionSpec extends WordSpec {
           Schema(2L, "test", SemanticVersion("v1.1.0"), incompatiblyEvolvedSchema),
           Schema(3L, "test", SemanticVersion("v1.1.1"), compatiblyEvolvedSchema)
         )
-        val actual = VersioningRule.nextVersion(parse(originalSchema), schemas)
+        val actual = VersioningRule.nextVersion(parse(originalSchema))(schemas)
         actual should equal (SemanticVersion("v1.2.0"))
       }
     }
@@ -97,7 +97,7 @@ class VersionSpec extends WordSpec {
           Schema(3L, "test", SemanticVersion("v1.1.1"), compatiblyEvolvedSchema)
         )
 
-        val actual = VersioningRule.nextVersion(parse(totallyDifferentSchema), schemas)
+        val actual = VersioningRule.nextVersion(parse(totallyDifferentSchema))(schemas)
         actual should equal (SemanticVersion("v2.0.0"))
       }
     }

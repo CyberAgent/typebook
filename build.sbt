@@ -75,7 +75,7 @@ lazy val core = (project in file("core")).
       "junit" % "junit" % junitVersion % Test,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "org.slf4j" % "slf4j-api" % slf4jVersion % Test,
-      "org.slf4j" % "slf4j-log4j12" % slf4jVersion % Test
+      "ch.qos.logback" % "logback-classic" % logbackVersion % Test
     ),
     publishArtifact := false
   )
