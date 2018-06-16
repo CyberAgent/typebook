@@ -61,23 +61,6 @@ class SubjectServiceIntegrationSpec extends FlatSpec with StorageBackend with St
           subject.name should equal (subjectName)
           subject.description.isDefined shouldBe true
           subject.description.get should equal (subjectDescription)
-
-
-          // read a specific field
-          val name = TestSubjectService.readField(
-            Input.get(s"/subjects/$subjectName", ("field", "name"))
-          ).awaitValueUnsafe(awaitTime).get
-
-          log.info(s"name is $name")
-          name should equal (subjectName)
-
-
-          val description = TestSubjectService.readField(
-            Input.get(s"/subjects/$subjectName", ("field", "description"))
-          ).awaitValueUnsafe(awaitTime).get
-
-          log.info(s"description is $description")
-          description should equal (subjectDescription)
         }
 
 
@@ -150,20 +133,6 @@ class SubjectServiceIntegrationSpec extends FlatSpec with StorageBackend with St
           tryOutput.status.code should equal (404)
         }
 
-
-        // Abnormal: try to read a not existing field of existing subjects
-        // The endpoint read should return 400 BadRequest
-        withRule(UsingCleanTables(client)) { _ =>
-          TestSubjectService.create( Input.post(s"/subjects/$subjectName").withBody[Text.Plain](Buf.Utf8(subjectDescription)) ).awaitValue(awaitTime)
-
-          val tryOutput = TestSubjectService.readField(
-            Input.get(s"/subjects/$subjectName", ("field", "foo"))
-          ).awaitOutputUnsafe(awaitTime).get
-
-          log.info(s"A response for not existing field is $tryOutput")
-          tryOutput.status.code should equal (400)
-
-        }
 
       }
     }

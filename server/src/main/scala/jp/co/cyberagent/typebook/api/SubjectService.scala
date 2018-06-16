@@ -30,8 +30,8 @@ import jp.co.cyberagent.typebook.model.{ErrorResponse, Subject}
 
 
 object SubjectService extends SubjectServiceTrait with DefaultMySQLBackend {
-  val jsonEndpoints = read :+: readAll
-  val textEndpoints = create :+: readField :+: update :+: del
+  private [typebook] val jsonEndpoints = read :+: readAll
+  private [typebook] val textEndpoints = create :+: update :+: del
 }
 
 trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
@@ -64,23 +64,6 @@ trait SubjectServiceTrait extends ErrorHandling { self: MySQLBackend =>
       case None => NotFound(ErrorResponse(404, "Subject Not Found"))
     }
   } handle backendErrors
-
-
-  /**
-    * GET /subjects/(subject: string)}?field={name|description}
-    * Read a specific field of the specified subject with the given name
-    * available values for the param `field` are  `name` and `description`
-    * @return
-    */
-  val readField: Endpoint[String] = get(
-    "subjects" :: path[String] :: paramExists("field")
-  ) { (subject: String, field: String) =>
-    SubjectClient.read(subject, field).map {
-      case Some(value) => Ok(value)
-      case None => NotFound(ErrorResponse(404, s"Value of $field of subject $subject is not found"))
-    }
-  } handle backendErrors
-
 
 
   /**

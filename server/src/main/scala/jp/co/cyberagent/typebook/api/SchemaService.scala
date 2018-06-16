@@ -37,7 +37,7 @@ import jp.co.cyberagent.typebook.version.{SemanticVersion, VersioningRule}
 
 
 object SchemaService extends SchemaServiceTrait with DefaultMySQLBackend {
-  val jsonEndpoints = create :+: lookup :+: lookupAll :+: readById :+:
+  private [typebook] val jsonEndpoints = create :+: lookup :+: lookupAll :+: readById :+:
     readByVersion :+: readVersions :+: checkCompatibility
 }
 
