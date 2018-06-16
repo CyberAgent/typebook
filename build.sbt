@@ -15,8 +15,8 @@ val dockerImageVersion = taskKey[String]("the version for docker image of schema
 val avroVersion = "1.8.2"
 val circeVersion = "0.9.3"
 val ficusVersion = "1.4.3"
-val twitterVersion = "18.5.0"
-val finchVersion = "0.20.0"
+val twitterVersion = "18.6.0"
+val finchVersion = "0.21.0"
 val logbackVersion = "1.2.3"
 
 // The versions for test dependency libraries
@@ -75,7 +75,7 @@ lazy val core = (project in file("core")).
       "junit" % "junit" % junitVersion % Test,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "org.slf4j" % "slf4j-api" % slf4jVersion % Test,
-      "org.slf4j" % "slf4j-log4j12" % slf4jVersion % Test
+      "ch.qos.logback" % "logback-classic" % logbackVersion % Test
     ),
     publishArtifact := false
   )

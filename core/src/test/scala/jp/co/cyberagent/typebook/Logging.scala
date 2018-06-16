@@ -1,7 +1,7 @@
 package jp.co.cyberagent.typebook
 
-import org.slf4j.LoggerFactory
+import org.slf4j.{Logger, LoggerFactory}
 
 trait Logging extends Serializable {
-  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+  @transient lazy val log: Logger = LoggerFactory.getLogger(getClass.getName)
 }

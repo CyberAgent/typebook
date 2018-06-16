@@ -23,6 +23,8 @@ package jp.co.cyberagent.typebook.api
 
 import java.util.NoSuchElementException
 
+import scala.util.{Failure, Success}
+
 import com.twitter.logging.Logger
 import com.twitter.util.Future
 import io.circe.DecodingFailure
@@ -35,8 +37,8 @@ import jp.co.cyberagent.typebook.model.{Config, ErrorResponse, RegistryConfig}
 
 
 object ConfigService extends ConfigServiceTrait with DefaultMySQLBackend {
-  val textEndpoints = set :+: setProperty :+: readProperty :+: del :+: delProperty
-  val jsonEndpoints = read
+  private [typebook] val textEndpoints = set :+: setProperty :+: readProperty :+: del :+: delProperty
+  private [typebook] val jsonEndpoints = read
 }
 
 trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
@@ -75,14 +77,15 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
   val setProperty: Endpoint[UpdatedRows] = put(
     "config" :: path[String] :: "properties" :: path[String] :: stringBody
   ).as[Config] mapOutputAsync { config =>
-    ConfigClient.set(config.subject, RegistryConfig.fromSeq(Seq(config))).map(Ok) // FIXME only update to weaker restriction should be allowed ???
-  } handle {
-    case ns: NoSuchElementException =>
-      val msg = "Invalid compatibility value is provided"
-      log.warning(msg)
-      UnprocessableEntity(ErrorResponse(422, msg))
+    RegistryConfig.fromSeq(Seq(config)) match {
+      case Failure(ex) => ex match {
+        case _: NoSuchElementException =>
+          Future.value(UnprocessableEntity(ErrorResponse(422, s"Invalid value ${config.value} is provided to ${config.property}")))
+        case _ => throw ex
+      }
+      case Success(r) => ConfigClient.set(config.subject, r).map(Ok) // FIXME only update to weaker restriction should be allowed ???
+    }
   } handle backendErrors
-
 
   /**
     * GET /config/(subject: string)
@@ -94,7 +97,13 @@ trait ConfigServiceTrait extends ErrorHandling { self: MySQLBackend =>
     SubjectClient.read(subject).flatMap {
       case None => Future.value(NotFound(ErrorResponse(404, "Non existent subject")))
       case Some(_) => ConfigClient.read(subject).map { configs =>
-        Ok(RegistryConfig.fromSeq(configs))
+        RegistryConfig.fromSeq(configs) match {
+          case Failure(ex) => ex match {
+            case nse: NoSuchElementException => InternalServerError(nse)
+            case _ => throw ex
+          }
+          case Success(config) => Ok(config)
+        }
       }
     }
 

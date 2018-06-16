@@ -246,7 +246,7 @@ class ConfigServiceIntegrationSpec extends FlatSpec with StorageBackend with Sto
           actual should equal (RegistryConfig.default)
 
           val actualProp = TestConfigService.readProperty(
-            Input.get(s"/config/$subjectName/properties/${RegistryConfig.Compatibility}")
+            Input.get(s"/config/$subjectName/properties/${RegistryConfig.CompatibilityProperty}")
           ).awaitValueUnsafe(awaitTime).get
 
           log.info(s"default compatibility value for subject $subjectName is $actualProp")

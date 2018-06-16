@@ -26,7 +26,6 @@ import io.circe.generic.extras.ConfiguredJsonCodec
 /**
   * This case class corresponds to a configuration of a Subject
   * All properties must not be empty otherwise this throws IllegalArgumentException
- *
   * @param subject
   * @param property
   * @param value

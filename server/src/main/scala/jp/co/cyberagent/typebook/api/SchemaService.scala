@@ -31,14 +31,13 @@ import io.finch.syntax._
 import org.apache.avro.{Schema => AvroSchema}
 
 import jp.co.cyberagent.typebook.compatibility.{CompatibilityUtil, SchemaCompatibility}
-import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility.SchemaCompatibility
 import jp.co.cyberagent.typebook.db.{ConfigClient, DefaultMySQLBackend, MySQLBackend, SchemaClient}
 import jp.co.cyberagent.typebook.model._
 import jp.co.cyberagent.typebook.version.{SemanticVersion, VersioningRule}
 
 
 object SchemaService extends SchemaServiceTrait with DefaultMySQLBackend {
-  val jsonEndpoints = create :+: lookup :+: lookupAll :+: readById :+:
+  private [typebook] val jsonEndpoints = create :+: lookup :+: lookupAll :+: readById :+:
     readByVersion :+: readVersions :+: checkCompatibility
 }
 
@@ -77,7 +76,7 @@ trait SchemaServiceTrait extends ErrorHandling { self: MySQLBackend =>
         log.info("Schema did not created - Same definition as the latest one")
         Future.value(Ok(SchemaId(latestSchema.id))) // if posted schema conforms to the latest one, no need to create
       case _ =>
-        val nextVersion = VersioningRule.nextVersion(avroSchema, latestMajorSchemas)
+        val nextVersion = VersioningRule.nextVersion(avroSchema)(latestMajorSchemas)
         SchemaClient.create(subject, nextVersion, avroSchema).map (id => Created(SchemaId(id)))
     }
   }} handle backendErrors
@@ -176,10 +175,11 @@ trait SchemaServiceTrait extends ErrorHandling { self: MySQLBackend =>
 
 
   // utility to read the latest schema under the subject and compatibility restriction
-  private def withLatestMajorSchemasAndRestriction[T](subject: String)(f: (Seq[Schema], SchemaCompatibility) => Future[T]) =
-    SchemaClient.readLatestMajorSchemas(subject) join
-      ConfigClient.readProperty(subject, RegistryConfig.Compatibility).map(_.getOrElse("NONE")).map(SchemaCompatibility.withName) flatMap {
-      case (latestMajorSchemas: Seq[Schema], restriction: SchemaCompatibility) => f(latestMajorSchemas, restriction)
-    }
+  private def withLatestMajorSchemasAndRestriction[T](subject: String)(f: (Seq[Schema], SchemaCompatibility) => Future[T]): Future[T] =
+    (SchemaClient.readLatestMajorSchemas(subject) join
+    ConfigClient.readProperty(subject, RegistryConfig.CompatibilityProperty).map {
+      case None => RegistryConfig.default.compatibility
+      case Some(restriction) => SchemaCompatibility(restriction)
+    }) flatMap f.tupled
 
 }

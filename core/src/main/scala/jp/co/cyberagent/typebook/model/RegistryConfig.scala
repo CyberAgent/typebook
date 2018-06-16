@@ -21,13 +21,13 @@
 
 package jp.co.cyberagent.typebook.model
 
+import scala.util.Try
+
 import io.circe._
 import io.circe.parser._
 import io.circe.syntax._
 
 import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility
-import jp.co.cyberagent.typebook.compatibility.SchemaCompatibility.SchemaCompatibility
-
 
 /**
   * @param compatibility
@@ -38,11 +38,11 @@ case class RegistryConfig(
   import RegistryConfig._
 
   def toConfigs(subject: String): Seq[Config] = Seq(
-    Config(subject, RegistryConfig.Compatibility, compatibility.toString)
+    Config(subject, RegistryConfig.CompatibilityProperty, compatibility.toString)
   )
   def toJson: Json = this.asJson
   def toMap: Map[String, String] = Map(
-    Compatibility -> compatibility.toString
+    CompatibilityProperty -> compatibility.toString
   )
 }
 
@@ -50,9 +50,9 @@ case class RegistryConfig(
 object RegistryConfig {
 
   // Available properties of RegistryConfig
-  final val Compatibility = "compatibility"
+  final val CompatibilityProperty = "compatibility"
   final val Properties: Set[String] = Set(
-    Compatibility
+    CompatibilityProperty
   )
 
   /**
@@ -73,13 +73,13 @@ object RegistryConfig {
     * @param configs
     * @return
     */
-  def fromSeq(configs: Seq[Config]): RegistryConfig = {
+  def fromSeq(configs: Seq[Config]): Try[RegistryConfig] = {
     val filtered = configs.collect {
       case Config(_, property, value) if isDefined(property) => (property, value)
     }.toMap
-    RegistryConfig(
-      compatibility = filtered.get(Compatibility).map(SchemaCompatibility.withName).getOrElse(default.compatibility)
-    )
+    Try(RegistryConfig(
+      compatibility = filtered.get(CompatibilityProperty).map(SchemaCompatibility.apply).getOrElse(default.compatibility)
+    ))
   }
 
   /**

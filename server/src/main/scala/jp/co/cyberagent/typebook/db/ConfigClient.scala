@@ -61,11 +61,11 @@ object ConfigClient extends RaisingServerError {
     * @param client
     * @return the number of inserted rows to the db
     */
-  def set(props: Seq[Config])(implicit client: Client): Future[UpdatedRows] = Future.collect(
-      props.groupBy(_.subject) map { case (subject: String, configs: Seq[Config]) =>
-        set(subject, RegistryConfig.fromSeq(configs))
-      } toSeq
-    ) map(_.sum)
+//  def set(props: Seq[Config])(implicit client: Client): Future[UpdatedRows] = Future.collect(
+//      props.groupBy(_.subject) map { case (subject: String, configs: Seq[Config]) =>
+//        set(subject, RegistryConfig.fromSeq(configs))
+//      } toSeq
+//    ) map(_.sum)
 
 
   /**
