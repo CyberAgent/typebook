@@ -1,6 +1,8 @@
 
 # Created by https://www.gitignore.io/api/scala,intellij+all
 
+dist
+
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -70,6 +72,7 @@ core/target/**
 server/target/**
 docs/target/**
 
+
 ### Go ###
 # Binaries for programs and plugins
 *.exe
@@ -85,5 +88,3 @@ docs/target/**
 
 # Golang project vendor packages which should be ignored
 vendor/
-
-# End of https://www.gitignore.io/api/go
